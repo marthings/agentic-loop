@@ -58,6 +58,8 @@ function App() {
   const [selectedTask, setSelectedTask] = useState<Task | null>(initialSelected)
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState<'All' | Task['status']>('All')
+  // List: ids of tasks selected for bulk actions
+  const [selectedIds, setSelectedIds] = useState<number[]>([])
   // Settings: default status applied to newly created tasks
   const [defaultStatus, setDefaultStatus] = useState<Task['status']>('Todo')
   // Share: transient "copied" feedback + a notice when opened from a shared link
@@ -173,6 +175,19 @@ function App() {
     goToList()
   }
 
+  const toggleSelect = (id: number) =>
+    setSelectedIds(ids => ids.includes(id) ? ids.filter(x => x !== id) : [...ids, id])
+  const toggleSelectAll = () => {
+    const allSelected = filteredTasks.length > 0 && filteredTasks.every(t => selectedIds.includes(t.id))
+    setSelectedIds(allSelected ? [] : filteredTasks.map(t => t.id))
+  }
+  const deleteSelected = () => {
+    if (selectedIds.length === 0) return
+    if (!confirm(`Delete ${selectedIds.length} task(s)?`)) return
+    setTasks(tasks.filter(t => !selectedIds.includes(t.id)))
+    setSelectedIds([])
+  }
+
   const navItems = [
     { id: 'list', label: 'All Tasks', icon: <Home className="w-4 h-4" /> },
     { id: 'create', label: 'New Task', icon: <FileText className="w-4 h-4" /> },
@@ -279,6 +294,11 @@ function App() {
                   <option value="In Progress">In Progress</option>
                   <option value="Done">Done</option>
                 </select>
+                {selectedIds.length > 0 && (
+                  <Button variant="secondary" onClick={deleteSelected} className="border border-[var(--fgm-border)]">
+                    Delete selected ({selectedIds.length})
+                  </Button>
+                )}
               </div>
 
               {/* Table - matches Figma card p-25 rounded-16 */}
@@ -286,6 +306,14 @@ function App() {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="text-left border-b border-[var(--fgm-border)] text-[var(--fgm-text-secondary)]">
+                      <th className="p-3 w-8">
+                        <input
+                          type="checkbox"
+                          checked={filteredTasks.length > 0 && filteredTasks.every(t => selectedIds.includes(t.id))}
+                          onChange={toggleSelectAll}
+                          aria-label="Select all tasks"
+                        />
+                      </th>
                       <th className="p-3">Title</th>
                       <th className="p-3">Status</th>
                       <th className="p-3">Due</th>
@@ -293,9 +321,17 @@ function App() {
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredTasks.length === 0 && <tr><td colSpan={4} className="p-4 text-center text-[var(--fgm-text-secondary)]">No tasks found.</td></tr>}
+                    {filteredTasks.length === 0 && <tr><td colSpan={5} className="p-4 text-center text-[var(--fgm-text-secondary)]">No tasks found.</td></tr>}
                     {filteredTasks.map(task => (
                       <tr key={task.id} onClick={() => openDetail(task)} className="border-b border-[var(--fgm-border)] last:border-0 hover:bg-[var(--fgm-bg-secondary)] cursor-pointer">
+                        <td className="p-3" onClick={e => e.stopPropagation()}>
+                          <input
+                            type="checkbox"
+                            checked={selectedIds.includes(task.id)}
+                            onChange={() => toggleSelect(task.id)}
+                            aria-label={`Select ${task.title}`}
+                          />
+                        </td>
                         <td className="p-3 font-medium">{task.title}</td>
                         <td className="p-3">
                           <StatusBadge status={task.status} />
