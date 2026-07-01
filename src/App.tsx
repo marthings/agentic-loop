@@ -196,9 +196,9 @@ function App() {
   ]
 
   return (
-    <div className="flex min-h-screen bg-[var(--fgm-bg)] text-[var(--fgm-text)]">
+    <div className="flex flex-col md:flex-row min-h-screen bg-[var(--fgm-bg)] text-[var(--fgm-text)]">
       {/* Sidebar */}
-      <aside className="w-64 border-r border-[var(--fgm-border)] bg-[var(--fgm-bg-secondary)] pl-[16px] pr-[17px] py-[16px] flex flex-col">
+      <aside className="w-full md:w-64 border-b md:border-b-0 md:border-r border-[var(--fgm-border)] bg-[var(--fgm-bg-secondary)] pl-[16px] pr-[17px] py-[16px] flex flex-col">
         <div className="flex items-center gap-3 mb-8 px-2">
           <div className="w-9 h-9 rounded-xl bg-[var(--fgm-accent)] flex items-center justify-center">
             <Layers className="w-5 h-5 text-white" />
@@ -241,7 +241,7 @@ function App() {
 
       {/* Main */}
       <div className="flex-1 flex flex-col">
-        <header className="border-b border-[var(--fgm-border)] bg-[var(--fgm-bg)] px-8 py-4 flex items-center justify-between">
+        <header className="border-b border-[var(--fgm-border)] bg-[var(--fgm-bg)] px-4 md:px-8 py-4 flex items-center justify-between gap-3">
           <div>
             <div className="font-semibold text-lg">
               {currentView === 'list' && 'Tasks'}
@@ -256,7 +256,7 @@ function App() {
           </Button>
         </header>
 
-        <div className="flex-1 p-8 overflow-auto">
+        <div className="flex-1 p-4 md:p-8 overflow-auto">
           {/* LIST VIEW */}
           {currentView === 'list' && (
             <>
@@ -269,26 +269,26 @@ function App() {
               </div>
 
               {/* Stats - match Figma node 7:3 exact paddings/sizes */}
-              <div className="flex gap-4 mb-6">
-                <div className="bg-white border border-[var(--fgm-border)] rounded-[16px] p-[25px] w-[289.5px] flex-shrink-0"><div className="text-[14px] text-[var(--fgm-text-secondary)]">Total</div><div className="text-[24px] leading-[32px] font-semibold tracking-[0.07px]">{stats.total}</div></div>
-                <div className="bg-white border border-[var(--fgm-border)] rounded-[16px] p-[25px] w-[289.5px] flex-shrink-0"><div className="text-[14px] text-[var(--fgm-text-secondary)]">Todo</div><div className="text-[24px] leading-[32px] font-semibold tracking-[0.07px]">{stats.todo}</div></div>
-                <div className="bg-white border border-[var(--fgm-border)] rounded-[16px] p-[25px] w-[289.5px] flex-shrink-0"><div className="text-[14px] text-[var(--fgm-text-secondary)]">In Progress</div><div className="text-[24px] leading-[32px] font-semibold tracking-[0.07px]">{stats.inProgress}</div></div>
-                <div className="bg-white border border-[var(--fgm-border)] rounded-[16px] p-[25px] w-[289.5px] flex-shrink-0"><div className="text-[14px] text-[var(--fgm-text-secondary)]">Done</div><div className="text-[24px] leading-[32px] font-semibold tracking-[0.07px]">{stats.done}</div></div>
+              <div className="flex flex-wrap md:flex-nowrap gap-4 mb-6">
+                <div className="bg-white border border-[var(--fgm-border)] rounded-[16px] p-[25px] w-full sm:w-[289.5px] flex-shrink-0"><div className="text-[14px] text-[var(--fgm-text-secondary)]">Total</div><div className="text-[24px] leading-[32px] font-semibold tracking-[0.07px]">{stats.total}</div></div>
+                <div className="bg-white border border-[var(--fgm-border)] rounded-[16px] p-[25px] w-full sm:w-[289.5px] flex-shrink-0"><div className="text-[14px] text-[var(--fgm-text-secondary)]">Todo</div><div className="text-[24px] leading-[32px] font-semibold tracking-[0.07px]">{stats.todo}</div></div>
+                <div className="bg-white border border-[var(--fgm-border)] rounded-[16px] p-[25px] w-full sm:w-[289.5px] flex-shrink-0"><div className="text-[14px] text-[var(--fgm-text-secondary)]">In Progress</div><div className="text-[24px] leading-[32px] font-semibold tracking-[0.07px]">{stats.inProgress}</div></div>
+                <div className="bg-white border border-[var(--fgm-border)] rounded-[16px] p-[25px] w-full sm:w-[289.5px] flex-shrink-0"><div className="text-[14px] text-[var(--fgm-text-secondary)]">Done</div><div className="text-[24px] leading-[32px] font-semibold tracking-[0.07px]">{stats.done}</div></div>
               </div>
 
               {/* Filters - pt after stats to match design */}
-              <div className="flex gap-4 mb-4 pt-1">
+              <div className="flex flex-col sm:flex-row gap-4 mb-4 pt-1">
                 <input
                   type="text"
                   placeholder="Search tasks..."
                   value={searchTerm}
                   onChange={e => setSearchTerm(e.target.value)}
-                  className="border border-[var(--fgm-border)] rounded-md px-[13px] py-[9px] text-sm flex-1 max-w-xs bg-[var(--fgm-bg)]"
+                  className="border border-[var(--fgm-border)] rounded-md px-[13px] py-[9px] text-sm w-full sm:flex-1 sm:max-w-xs bg-[var(--fgm-bg)]"
                 />
                 <select
                   value={statusFilter}
                   onChange={e => setStatusFilter(e.target.value as any)}
-                  className="border border-[var(--fgm-border)] rounded-[6px] px-3 py-2 text-sm bg-[var(--fgm-bg)] w-[119px]"
+                  className="border border-[var(--fgm-border)] rounded-[6px] px-3 py-2 text-sm bg-[var(--fgm-bg)] w-full sm:w-[119px]"
                 >
                   <option value="All">All Status</option>
                   <option value="Todo">Todo</option>
@@ -304,7 +304,8 @@ function App() {
 
               {/* Table - matches Figma card p-25 rounded-16 */}
               <Card className="overflow-hidden">
-                <table className="w-full text-sm">
+                <div className="overflow-x-auto">
+                <table className="w-full min-w-[560px] text-sm">
                   <thead>
                     <tr className="text-left border-b border-[var(--fgm-border)] text-[var(--fgm-text-secondary)]">
                       <th className="p-3 w-8">
@@ -343,6 +344,7 @@ function App() {
                     ))}
                   </tbody>
                 </table>
+                </div>
               </Card>
               <p className="text-xs mt-2 text-[var(--fgm-text-secondary)]">Click any row to open detail. CRUD powered by in-memory state (FigJam spec).</p>
             </>
@@ -363,7 +365,7 @@ function App() {
                   <label className="block text-sm mb-1">Description</label>
                   <textarea value={form.description} onChange={e => setForm({...form, description: e.target.value})} className="w-full border border-[var(--fgm-border)] rounded px-3 py-2 h-24" />
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm mb-1">Status</label>
                     <select value={form.status} onChange={e => setForm({...form, status: e.target.value as any})} className="w-full border border-[var(--fgm-border)] rounded px-3 py-2">
@@ -407,7 +409,7 @@ function App() {
                   <label className="block text-sm mb-1">Description</label>
                   <textarea value={form.description} onChange={e => setForm({...form, description: e.target.value})} className="w-full border border-[var(--fgm-border)] rounded px-3 py-2 h-28" />
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm mb-1">Status</label>
                     <select value={form.status} onChange={e => setForm({...form, status: e.target.value as any})} className="w-full border border-[var(--fgm-border)] rounded px-3 py-2">
@@ -421,7 +423,7 @@ function App() {
                     <input type="date" value={form.dueDate} onChange={e => setForm({...form, dueDate: e.target.value})} className="w-full border border-[var(--fgm-border)] rounded px-3 py-2" />
                   </div>
                 </div>
-                <div className="flex gap-3 pt-2 items-center">
+                <div className="flex flex-wrap gap-3 pt-2 items-center">
                   <Button type="button" variant="secondary" onClick={handleDelete}>Delete</Button>
                   <Button type="button" variant="secondary" onClick={shareTask}>Share</Button>
                   <Button type="submit" variant="primary" className="flex-1">Save Changes</Button>
