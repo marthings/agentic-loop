@@ -89,11 +89,12 @@ function App() {
       (statusFilter === 'All' || t.status === statusFilter)
     )
 
+  // Stats reflect the current search/filter (the visible list), not the full set
   const stats = {
-    total: tasks.length,
-    todo: tasks.filter(t => t.status === 'Todo').length,
-    inProgress: tasks.filter(t => t.status === 'In Progress').length,
-    done: tasks.filter(t => t.status === 'Done').length,
+    total: filteredTasks.length,
+    todo: filteredTasks.filter(t => t.status === 'Todo').length,
+    inProgress: filteredTasks.filter(t => t.status === 'In Progress').length,
+    done: filteredTasks.filter(t => t.status === 'Done').length,
   }
 
   const openDetail = (task: Task) => {
