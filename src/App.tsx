@@ -205,7 +205,7 @@ function App() {
           </div>
           <div>
             <div className="font-semibold tracking-tight text-xl">MakeJam</div>
-            <div className="text-[10px] text-[var(--fgm-text-secondary)] -mt-1">Simple Tasks CRUD</div>
+            <div className="text-[10px] text-[var(--fgm-text-secondary)] -mt-1">Task tracker</div>
           </div>
         </div>
 
@@ -249,7 +249,7 @@ function App() {
               {currentView === 'detail' && 'Task Detail'}
               {currentView === 'settings' && 'Settings'}
             </div>
-            <div className="text-xs text-[var(--fgm-text-secondary)]">Standard CRUD web project • FigJam spec</div>
+            <div className="text-xs text-[var(--fgm-text-secondary)]">A simple task tracker</div>
           </div>
           <Button variant="secondary" onClick={() => window.location.reload()} className="text-[14px] font-semibold px-[19px] py-[11px] rounded-[10px] border border-[var(--fgm-border)] flex items-center gap-2">
             <RefreshCw className="w-3.5 h-3.5 inline" /> Reset
@@ -263,7 +263,7 @@ function App() {
               <div className="flex justify-between items-center mb-6">
                 <div>
                   <h1 className="text-3xl font-semibold tracking-tight">Tasks</h1>
-                  <p className="text-[var(--fgm-text-secondary)]">Simple CRUD • Spec in FigJam</p>
+                  <p className="text-[var(--fgm-text-secondary)]">Your tasks, all in one place</p>
                 </div>
                 <Button variant="primary" onClick={goToCreate} className="px-[19px] py-[11px] rounded-[10px]">+ New Task</Button>
               </div>
@@ -346,7 +346,7 @@ function App() {
                 </table>
                 </div>
               </Card>
-              <p className="text-xs mt-2 text-[var(--fgm-text-secondary)]">Click any row to open detail. CRUD powered by in-memory state (FigJam spec).</p>
+              <p className="text-xs mt-2 text-[var(--fgm-text-secondary)]">Click any row to open it. Your data lives in this browser session.</p>
             </>
           )}
 
@@ -354,7 +354,7 @@ function App() {
           {currentView === 'create' && (
             <div className="max-w-lg">
               <h1 className="text-2xl font-semibold mb-1">New Task</h1>
-              <p className="text-sm text-[var(--fgm-text-secondary)] mb-6">Create a new task. Matches FigJam New Task spec.</p>
+              <p className="text-sm text-[var(--fgm-text-secondary)] mb-6">Add a new task.</p>
 
               <form onSubmit={handleCreate} className="space-y-4 card">
                 <div>
@@ -432,7 +432,7 @@ function App() {
               </form>
 
               <div className="text-xs text-[var(--fgm-text-secondary)]">
-                This view matches the Task Detail spec in FigJam. All changes are local (in-memory CRUD).
+                Changes are saved in this browser session.
               </div>
             </div>
           )}
@@ -441,7 +441,7 @@ function App() {
           {currentView === 'settings' && (
             <div className="max-w-lg">
               <h1 className="text-2xl font-semibold mb-1">Settings</h1>
-              <p className="text-sm text-[var(--fgm-text-secondary)] mb-6">App preferences. Matches FigJam Settings spec.</p>
+              <p className="text-sm text-[var(--fgm-text-secondary)] mb-6">App preferences.</p>
 
               <div className="space-y-6">
                 {/* Appearance / dark mode */}
@@ -488,7 +488,7 @@ function App() {
         </div>
 
         <footer className="border-t border-[var(--fgm-border)] px-8 py-4 text-xs text-[var(--fgm-text-secondary)]">
-          MakeJam Tasks • 3-page CRUD • Spec from FigJam • Code faithful to spec
+          MakeJam — a simple task tracker
         </footer>
       </div>
     </div>
