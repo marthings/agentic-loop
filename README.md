@@ -1,16 +1,14 @@
-# figma-make-jam
+# agentic-loop
 
-**FigJam → Code → Figma**
+**FigJam → Code → Figma** — an experiment in a governed, repeatable product loop, demoed with a small **Todo App**.
 
-This is an experimental workspace to treat **FigJam as the primary source of truth** for documentation, architecture, decisions and component contracts for a React application — while still shipping high-fidelity, reviewable designs into Figma.
+## The loop — who owns what
 
-## The intended loop
+- **FigJam** — source of truth for **documentation & specs** (the project board: sitemap flow + per-page requirements & user stories).
+- **Code** (this repo) — the executable implementation. We iterate here first.
+- **Figma design file** — source of truth for **design & tokens** (captured screens; color / spacing / radius / typography variables + text styles).
 
-1. **FigJam** — Collaborative planning and living documentation (architecture, flows, specs, tradeoffs).
-2. **Code** (this React app) — Faithful implementation of the documented intent.
-3. **Figma** — "Ship design" step: use the running code + `prototype-to-figma` to generate structured Figma frames for handoff, review, and canonical design system maintenance.
-
-The goal is to find a lightweight, sustainable workflow where FigJam stays the place teams go for "why and how we decided", the React codebase is the executable truth, and Figma remains excellent for visual assets and cross-functional review.
+Authority: **FigJam → Design → Code.** Build in code, port into the design file (capture + token/style sync); manual Figma edits flow back to code.
 
 ## Quick start
 
@@ -19,39 +17,24 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:5173 to see the current demo UI (a small living status board for the workflow itself).
+Open http://localhost:5174 for the Todo App demo.
+
+## Backlog
+
+Tracked as GitHub Issues on the **Agentic workflow** project board:
+https://github.com/users/marthings/projects/1
 
 ## Project layout
 
-- `src/` — The React implementation layer
-- `docs/` — Local mirrors and specs (FigJam structure, workflow details, tokens)
-- `README.md` — This file (high-level)
-- `docs/WORKFLOW.md` — Detailed process, rules, and sync practices
-- `docs/FIGJAM-BOARD.md` — The proposed content + structure for the canonical FigJam board
+- `src/` — React app (Vite + TS + Tailwind); `src/components/` — Button, Card, StatusBadge (+ Code Connect)
+- `docs/` — workflow, mapping (board ↔ code ↔ Figma), design tokens
+- `.claude/commands/verify-figma.md` — read-only drift check (code ↔ Figma)
 
-## Current status (as of 2026-06-29)
+## Links
 
-- React + Vite + TS + Tailwind scaffolded
-- Design tokens started in CSS (intentionally aligned with what we will map to Figma Variables)
-- Demo UI that illustrates the three-layer model
-- Workflow and FigJam board structure documented locally
-
-## Next steps (we'll do together)
-
-- [ ] Flesh out first real features in the demo app (so we have something concrete to document + ship)
-- [ ] Connect Figma MCP server (in your client)
-- [ ] Generate the official FigJam board using the structure in `docs/FIGJAM-BOARD.md` (via `generate-project-plan` skill or manual)
-- [ ] Implement a small feature fully through the loop: document in FigJam → code → ship via prototype-to-figma
-- [ ] Define token + component sync strategy (Figma Variables ↔ code)
-
-## Useful links
-
-- **Todo App — Project board (FigJam, source of truth):** https://www.figma.com/board/Qyo8JqnW7hQ4neaBAzG9K9
-- **Mapping (board ↔ Code ↔ Figma):** [`docs/MAPPING.md`](docs/MAPPING.md)
-- **Workflow (super basic):** [`docs/WORKFLOW.md`](docs/WORKFLOW.md)
-- **Figma design file (captured screens):** https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF
-- Deployed preview: *(TBD)*
-
----
-
-This repo itself is the first "product" we're using to validate the workflow.
+- **Project board (FigJam):** https://www.figma.com/board/Qyo8JqnW7hQ4neaBAzG9K9
+- **Design file (Figma):** https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF
+- **Backlog (GitHub Project):** https://github.com/users/marthings/projects/1
+- **Mapping:** [`docs/MAPPING.md`](docs/MAPPING.md)
+- **Workflow:** [`docs/WORKFLOW.md`](docs/WORKFLOW.md)
+- Deployed preview: *(TBD — see backlog)*
