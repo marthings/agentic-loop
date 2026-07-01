@@ -5,7 +5,8 @@ Process is in [`WORKFLOW.md`](./WORKFLOW.md): **add page to FigJam → write cod
 
 ## Sources
 
-- 📋 **Todo App — Project board** (FigJam, source of truth for docs & specs): https://www.figma.com/board/Qyo8JqnW7hQ4neaBAzG9K9 — zones: Project · Backlog · Sitemap (flow) · Page specs
+- 📋 **Todo App — Project board** (FigJam, source of truth for docs & specs): https://www.figma.com/board/Qyo8JqnW7hQ4neaBAzG9K9 — zones: Project · Sitemap (flow) · Page specs
+- 🗂️ **Backlog**: GitHub Project "Agentic workflow" (Issues) — https://github.com/users/marthings/projects/1
 - 💻 **Code**: this repo — `src/App.tsx`
 - 🎨 **Figma design file** (captured screens): https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF
 - 🎟️ **Design tokens ↔ Figma**: collections **Color** (Light/Dark), **Spacing**, **Radius**, **Font Size**, **Line Height** + six **text styles** (Display/Title/Heading/Body/Label/Caption) in the design file (canonical for tokens). Captured screens are **bound** to them — fills/strokes/radii reference the variables; text nodes use the styles. Code mirror in `src/index.css`. See [`design-tokens.md`](./design-tokens.md).
@@ -14,7 +15,7 @@ Process is in [`WORKFLOW.md`](./WORKFLOW.md): **add page to FigJam → write cod
 
 | Page | Dev URL | Code | Figma frame |
 |------|---------|------|-------------|
-| Home / Task List | `/` | `src/App.tsx` — `currentView === 'list'` | [node 2:2](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=2-2) |
+| Home / Task List | `/` | `src/App.tsx` — `currentView === 'list'` (incl. multi-select bulk delete) | [node 40:2](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=40-2) |
 | New Task | `/?view=create` | `src/App.tsx` — `currentView === 'create'` | [node 3:2](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=3-2) |
 | Task Detail | `/?view=detail` · `/?share=…` | `src/App.tsx` — `currentView === 'detail'` (incl. Share link) | [node 31:2](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=31-2) |
 | Settings | `/?view=settings` | `src/App.tsx` — `currentView === 'settings'` (incl. dark mode toggle) | [node 28:2](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=28-2) |

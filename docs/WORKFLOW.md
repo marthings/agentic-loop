@@ -17,7 +17,7 @@ When we want a new page, we say *"add a page called X"* and it goes on the FigJa
 
 | Step | Where | Source of truth for |
 |------|-------|----------------------|
-| 1. **Plan** | [Todo App — Project board (FigJam)](https://www.figma.com/board/Qyo8JqnW7hQ4neaBAzG9K9) | **Documentation & specs** — project overview, backlog, sitemap flow, per-page requirements & user stories |
+| 1. **Plan** | [Todo App — Project board (FigJam)](https://www.figma.com/board/Qyo8JqnW7hQ4neaBAzG9K9) | **Documentation & specs** — project overview, sitemap flow, per-page requirements & user stories. (Backlog lives in [GitHub Issues / Project](https://github.com/users/marthings/projects/1).) |
 | 2. **Build** | This repo — `src/App.tsx` | The executable implementation (we iterate here first) |
 | 3. **Design** | [Figma design file](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF) | **Design & tokens** — captured screens, color/spacing/radius variables, typography text styles |
 
