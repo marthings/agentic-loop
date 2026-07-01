@@ -83,9 +83,10 @@ function App() {
       : { title: '', description: '', status: 'Todo' as Task['status'], dueDate: '' }
   )
 
+  const q = searchTerm.trim().toLowerCase()
   const filteredTasks = tasks
-    .filter(t => 
-      t.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
+    .filter(t =>
+      (t.title.toLowerCase().includes(q) || t.description.toLowerCase().includes(q)) &&
       (statusFilter === 'All' || t.status === statusFilter)
     )
 
@@ -278,13 +279,23 @@ function App() {
 
               {/* Filters - pt after stats to match design */}
               <div className="flex flex-col sm:flex-row gap-4 mb-4 pt-1">
-                <input
-                  type="text"
-                  placeholder="Search tasks..."
-                  value={searchTerm}
-                  onChange={e => setSearchTerm(e.target.value)}
-                  className="border border-[var(--fgm-border)] rounded-md px-[13px] py-[9px] text-sm w-full sm:flex-1 sm:max-w-xs bg-[var(--fgm-bg)]"
-                />
+                <div className="relative w-full sm:flex-1 sm:max-w-xs">
+                  <input
+                    type="text"
+                    placeholder="Search title or description..."
+                    value={searchTerm}
+                    onChange={e => setSearchTerm(e.target.value)}
+                    className="border border-[var(--fgm-border)] rounded-md px-[13px] py-[9px] pr-8 text-sm w-full bg-[var(--fgm-bg)]"
+                  />
+                  {searchTerm && (
+                    <button
+                      type="button"
+                      onClick={() => setSearchTerm('')}
+                      aria-label="Clear search"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 text-[var(--fgm-text-secondary)] hover:text-[var(--fgm-text)] text-base leading-none"
+                    >×</button>
+                  )}
+                </div>
                 <select
                   value={statusFilter}
                   onChange={e => setStatusFilter(e.target.value as any)}
