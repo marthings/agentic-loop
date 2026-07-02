@@ -15,11 +15,15 @@ Process is in [`WORKFLOW.md`](./WORKFLOW.md): **add page to FigJam → write cod
 
 | Page | Dev URL | Code | Figma frame |
 |------|---------|------|-------------|
-| Home / Task List | `/` | `src/App.tsx` — `currentView === 'list'` (incl. multi-select bulk delete) | [node 78:3](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=78-3) |
-| New Task | `/?view=create` | `src/App.tsx` — `currentView === 'create'` | [node 69:3](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=69-3) |
-| Task Detail | `/?view=detail` · `/?share=…` | `src/App.tsx` — `currentView === 'detail'` (incl. Share link) | [node 79:3](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=79-3) |
-| Settings | `/?view=settings` | `src/App.tsx` — `currentView === 'settings'` (incl. dark mode toggle) | [node 80:3](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=80-3) |
-| History & Stats | `/?view=history` | `src/App.tsx` — `currentView === 'history'` (status breakdown #30 + due-date insights #31 + activity #33) | [node 100:2](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=100-2) _(re-capture pending — batched into #25)_ |
+| Home / Task List | `/` | `src/App.tsx` — `currentView === 'list'` (incl. multi-select bulk delete) | [node 114:2](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=114-2) |
+| New Task | `/?view=create` | `src/App.tsx` — `currentView === 'create'` | [node 115:2](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=115-2) |
+| Task Detail | `/?view=detail` · `/?share=…` | `src/App.tsx` — `currentView === 'detail'` (incl. Share link) | [node 116:2](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=116-2) |
+| Settings | `/?view=settings` | `src/App.tsx` — `currentView === 'settings'` (incl. dark mode toggle) | [node 117:2](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=117-2) |
+| History & Stats | `/?view=history` | `src/App.tsx` — `currentView === 'history'` (status breakdown #30 + due-date insights #31 + activity #33) | [node 118:2](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=118-2) |
+
+All five frames are bound to the variables/text styles **and componentized** — captured
+buttons/badges/the status dropdown are instances of the library components (Button, StatusBadge,
+Dropdown). A re-capture wipes bindings, styles **and** instances — re-run all three passes.
 
 When a new page is added to the sitemap, add a row here. After re-capturing, the frame node id may change — update the link.
 
