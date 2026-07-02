@@ -38,3 +38,6 @@ https://github.com/users/marthings/projects/1
 - **Mapping:** [`docs/MAPPING.md`](docs/MAPPING.md)
 - **Workflow:** [`docs/WORKFLOW.md`](docs/WORKFLOW.md)
 - Deployed preview: *(TBD — see backlog)*
+
+The workflow document also defines the Git policy: one issue per short-lived branch, squash-only
+pull request merges, rebasing onto `main`, and automatic branch cleanup.
