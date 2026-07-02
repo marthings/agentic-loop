@@ -11,12 +11,14 @@ interface Task {
   description: string
   status: TaskStatus
   dueDate: string
+  createdAt: string
+  completedAt: string | null
 }
 
 const initialTasks: Task[] = [
-  { id: 1, title: 'Setup project structure', description: 'Initialize Vite + TS + Tailwind', status: 'Done', dueDate: '2026-06-20' },
-  { id: 2, title: 'Design tokens in CSS', description: 'Define color, spacing, radius vars', status: 'In Progress', dueDate: '2026-06-28' },
-  { id: 3, title: 'List view with search', description: 'Build tasks table + filters', status: 'Todo', dueDate: '2026-07-01' },
+  { id: 1, title: 'Setup project structure', description: 'Initialize Vite + TS + Tailwind', status: 'Done', dueDate: '2026-06-20', createdAt: '2026-06-15', completedAt: '2026-06-19' },
+  { id: 2, title: 'Design tokens in CSS', description: 'Define color, spacing, radius vars', status: 'In Progress', dueDate: '2026-06-28', createdAt: '2026-06-18', completedAt: null },
+  { id: 3, title: 'List view with search', description: 'Build tasks table + filters', status: 'Todo', dueDate: '2026-07-01', createdAt: '2026-06-25', completedAt: null },
 ]
 
 // Share: a task encoded into a ?share= link, decoded on load
@@ -25,7 +27,13 @@ function decodeSharedTask(): Task | null {
   const raw = new URLSearchParams(window.location.search).get('share')
   if (!raw) return null
   try {
-    return JSON.parse(decodeURIComponent(atob(raw))) as Task
+    // Older share links predate timestamps — default them
+    const parsed = JSON.parse(decodeURIComponent(atob(raw))) as Partial<Task>
+    return {
+      createdAt: new Date().toISOString().split('T')[0],
+      completedAt: null,
+      ...parsed,
+    } as Task
   } catch {
     return null
   }
@@ -146,6 +154,16 @@ function App() {
     },
   ]
 
+  // Activity (#33) — completedAt drives throughput + recently completed
+  const weekAgo = new Date(now)
+  weekAgo.setDate(weekAgo.getDate() - 7)
+  const weekAgoStr = `${weekAgo.getFullYear()}-${pad2(weekAgo.getMonth() + 1)}-${pad2(weekAgo.getDate())}`
+  const completedTasks = tasks.filter(t => t.status === 'Done' && t.completedAt)
+  const completedThisWeek = completedTasks.filter(t => t.completedAt! >= weekAgoStr).length
+  const recentlyCompleted = [...completedTasks]
+    .sort((a, b) => b.completedAt!.localeCompare(a.completedAt!))
+    .slice(0, 3)
+
   const openDetail = (task: Task) => {
     setSelectedTask(task)
     setForm({ title: task.title, description: task.description, status: task.status, dueDate: task.dueDate })
@@ -208,6 +226,8 @@ function App() {
       description: form.description.trim(),
       status: form.status,
       dueDate: form.dueDate || new Date().toISOString().split('T')[0],
+      createdAt: todayStr,
+      completedAt: form.status === 'Done' ? todayStr : null,
     }
     setTasks([...tasks, newTask])
     goToList()
@@ -218,7 +238,15 @@ function App() {
     if (!selectedTask) return
     const updated = tasks.map(t =>
       t.id === selectedTask.id
-        ? { ...t, title: form.title.trim(), description: form.description.trim(), status: form.status, dueDate: form.dueDate }
+        ? {
+            ...t,
+            title: form.title.trim(),
+            description: form.description.trim(),
+            status: form.status,
+            dueDate: form.dueDate,
+            // status → Done stamps completedAt (kept if already Done); leaving Done clears it
+            completedAt: form.status === 'Done' ? (t.completedAt ?? todayStr) : null,
+          }
         : t
     )
     setTasks(updated)
@@ -639,6 +667,31 @@ function App() {
                         </div>
                       ))}
                     </div>
+                  </Card>
+
+                  {/* Activity (#33) */}
+                  <Card>
+                    <div className="flex items-start justify-between gap-4 mb-6">
+                      <div>
+                        <h2 className="text-heading">Activity</h2>
+                        <p className="text-body text-[var(--fgm-text-secondary)]">What got done, and when.</p>
+                      </div>
+                      <span className="text-label">{completedThisWeek} completed this week</span>
+                    </div>
+                    {recentlyCompleted.length === 0 ? (
+                      <p className="text-caption text-[var(--fgm-text-secondary)]">
+                        Nothing completed yet — finish a task and it shows up here.
+                      </p>
+                    ) : (
+                      <ul className="space-y-2">
+                        {recentlyCompleted.map(t => (
+                          <li key={t.id} className="flex items-center justify-between gap-3">
+                            <span className="text-body truncate">{t.title}</span>
+                            <span className="text-caption text-[var(--fgm-text-secondary)] shrink-0">Done {t.completedAt}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </Card>
                 </div>
               )}
