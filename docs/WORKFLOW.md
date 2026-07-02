@@ -36,6 +36,36 @@ See [`MAPPING.md`](./MAPPING.md) for which sitemap page maps to which code, and
 
 That's the whole process. Keep it light.
 
+## Git and pull requests
+
+Keep `main` linear and let each merged pull request represent one finished backlog item.
+
+1. Start from an updated `main`: `git switch main && git pull --ff-only`.
+2. Create one short-lived branch per issue, for example `codex/issue-35-history-stats`.
+3. Do not combine unrelated issues in the same branch or pull request.
+4. If `main` moves, update the branch with `git fetch origin` followed by
+   `git rebase origin/main`. Do not merge `main` into the feature branch.
+5. Verify the change, push the branch, and open a pull request containing `Closes #N`.
+6. Merge using **Squash and merge** only. Delete the branch after the merge and do not reuse it.
+7. Land dependencies before starting work that builds on them. Avoid parallel branches that
+   modify the same files.
+
+Recommended GitHub repository settings under **Settings → General → Pull Requests**:
+
+- Enable **Allow squash merging**.
+- Disable **Allow merge commits** and **Allow rebase merging**.
+- Enable **Automatically delete head branches**.
+
+Protect `main` with an active branch ruleset under **Settings → Rules → Rulesets**:
+
+- Require a pull request before merging.
+- Require linear history.
+- Block force pushes and branch deletion.
+- Require build and lint status checks once CI is configured.
+
+Existing published history is not rewritten. These rules keep new history clean without a
+disruptive force-push.
+
 ## Capturing a screen into Figma
 
 The design file is filled by capturing the **running dev server** (we use `localhost:5174`). The capture needs Figma's `capture.js` script on the page, which we keep **out** of `index.html` so it never ships to production — add it only while capturing:

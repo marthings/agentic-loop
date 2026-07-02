@@ -1,6 +1,11 @@
 # agentic-loop
 
-**FigJam → Code → Figma** — an experiment in a governed, repeatable product loop, demoed with a small **Todo App**.
+**FigJam → Code → Figma** — a test bed for developing and evaluating a governed, repeatable
+agentic product loop, demonstrated with a small **Todo App**.
+
+The product is intentionally simple. The primary artifact under evaluation is the workflow across
+FigJam planning, GitHub backlog management, executable code, Figma design, and automated drift
+verification.
 
 ## The loop — who owns what
 
@@ -28,7 +33,8 @@ https://github.com/users/marthings/projects/1
 
 - `src/` — React app (Vite + TS + Tailwind); `src/components/` — Button, Card, StatusBadge (+ Code Connect)
 - `docs/` — workflow, mapping (board ↔ code ↔ Figma), design tokens
-- `.claude/commands/verify-figma.md` — read-only drift check (code ↔ Figma)
+- `.agents/skills/source-command-verify-figma/SKILL.md` — project-local, read-only drift check
+  covering code ↔ Figma components, tokens, and mapping integrity
 
 ## Links
 
@@ -38,3 +44,6 @@ https://github.com/users/marthings/projects/1
 - **Mapping:** [`docs/MAPPING.md`](docs/MAPPING.md)
 - **Workflow:** [`docs/WORKFLOW.md`](docs/WORKFLOW.md)
 - Deployed preview: *(TBD — see backlog)*
+
+The workflow document also defines the Git policy: one issue per short-lived branch, squash-only
+pull request merges, rebasing onto `main`, and automatic branch cleanup.
