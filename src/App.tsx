@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { BarChart3, FileText, Home, Layers, RefreshCw, Settings } from 'lucide-react'
+import { BarChart3, FileText, Home, Layers, Settings } from 'lucide-react'
 import { Button } from './components/Button'
 import { Card } from './components/Card'
 import { StatusBadge, type TaskStatus } from './components/StatusBadge'
@@ -252,21 +252,6 @@ function App() {
 
       {/* Main */}
       <div className="flex-1 flex flex-col">
-        <header className="border-b border-[var(--fgm-border)] bg-[var(--fgm-bg)] px-4 md:px-8 py-4 flex items-center justify-between gap-3">
-          <div>
-            <div className="font-semibold text-lg">
-              {currentView === 'list' && 'Tasks'}
-              {currentView === 'create' && 'New Task'}
-              {currentView === 'detail' && 'Task Detail'}
-              {currentView === 'settings' && 'Settings'}
-            </div>
-            <div className="text-xs text-[var(--fgm-text-secondary)]">A simple task tracker</div>
-          </div>
-          <Button variant="secondary" onClick={() => window.location.reload()} className="text-[14px] font-semibold px-[19px] py-[11px] rounded-[10px] border border-[var(--fgm-border)] flex items-center gap-2">
-            <RefreshCw className="w-3.5 h-3.5 inline" /> Reset
-          </Button>
-        </header>
-
         <div className="flex-1 p-4 md:p-8 overflow-auto">
           {/* LIST VIEW */}
           {currentView === 'list' && (
