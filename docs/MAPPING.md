@@ -15,11 +15,11 @@ Process is in [`WORKFLOW.md`](./WORKFLOW.md): **add page to FigJam → write cod
 
 | Page | Dev URL | Code | Figma frame |
 |------|---------|------|-------------|
-| Home / Task List | `/` | `src/App.tsx` — `currentView === 'list'` (incl. multi-select bulk delete) | [node 49:2](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=49-2) |
-| New Task | `/?view=create` | `src/App.tsx` — `currentView === 'create'` | [node 63:3](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=63-3) |
-| Task Detail | `/?view=detail` · `/?share=…` | `src/App.tsx` — `currentView === 'detail'` (incl. Share link) | [node 64:3](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=64-3) |
-| Settings | `/?view=settings` | `src/App.tsx` — `currentView === 'settings'` (incl. dark mode toggle) | [node 62:3](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=62-3) |
-| History & Stats | `/?view=history` | `src/App.tsx` — `currentView === 'history'` (status breakdown #30 + due-date insights #31) | _pending capture (#32)_ |
+| Home / Task List | `/` | `src/App.tsx` — `currentView === 'list'` (incl. multi-select bulk delete) | [node 78:3](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=78-3) |
+| New Task | `/?view=create` | `src/App.tsx` — `currentView === 'create'` | [node 69:3](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=69-3) |
+| Task Detail | `/?view=detail` · `/?share=…` | `src/App.tsx` — `currentView === 'detail'` (incl. Share link) | [node 79:3](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=79-3) |
+| Settings | `/?view=settings` | `src/App.tsx` — `currentView === 'settings'` (incl. dark mode toggle) | [node 80:3](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=80-3) |
+| History & Stats | `/?view=history` | `src/App.tsx` — `currentView === 'history'` (status breakdown #30 + due-date insights #31) | [node 100:2](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=100-2) |
 
 When a new page is added to the sitemap, add a row here. After re-capturing, the frame node id may change — update the link.
 
@@ -45,4 +45,4 @@ Organization/Enterprise plan with a Dev or Full seat (this file is on a Pro team
 files are already in the right format; nothing to rewrite. They're excluded from the app build via
 `tsconfig.app.json`.
 
-_Last updated: 2026-06-30_
+_Last updated: 2026-07-02_
