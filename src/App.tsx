@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { BarChart3, FileText, Home, Layers, Settings } from 'lucide-react'
 import { Button } from './components/Button'
 import { Card } from './components/Card'
+import { Dropdown } from './components/Dropdown'
 import { StatusBadge, type TaskStatus } from './components/StatusBadge'
 
 interface Task {
@@ -337,16 +338,18 @@ function App() {
                     >×</button>
                   )}
                 </div>
-                <select
+                <Dropdown
                   value={statusFilter}
-                  onChange={e => setStatusFilter(e.target.value as any)}
-                  className="border border-[var(--fgm-border)] rounded-[6px] px-3 py-2 text-sm bg-[var(--fgm-bg)] w-full sm:w-[119px]"
-                >
-                  <option value="All">All Status</option>
-                  <option value="Todo">Todo</option>
-                  <option value="In Progress">In Progress</option>
-                  <option value="Done">Done</option>
-                </select>
+                  onChange={v => setStatusFilter(v as 'All' | Task['status'])}
+                  ariaLabel="Filter by status"
+                  className="w-full sm:w-[140px]"
+                  options={[
+                    { value: 'All', label: 'All Status' },
+                    { value: 'Todo', label: 'Todo' },
+                    { value: 'In Progress', label: 'In Progress' },
+                    { value: 'Done', label: 'Done' },
+                  ]}
+                />
                 {selectedIds.length > 0 && (
                   <Button variant="secondary" onClick={deleteSelected} className="border border-[var(--fgm-border)]">
                     Delete selected ({selectedIds.length})
