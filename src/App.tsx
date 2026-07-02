@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { FileText, Home, Layers, Settings } from 'lucide-react'
+import { BarChart3, FileText, Home, Layers, Settings } from 'lucide-react'
 import { Button } from './components/Button'
 import { Card } from './components/Card'
 import { StatusBadge, type TaskStatus } from './components/StatusBadge'
@@ -44,7 +44,7 @@ function App() {
       ? initialTasks[0]
       : null
   const initialSelected = sharedTask ?? initialDetail
-  const [currentView, setCurrentView] = useState<'list' | 'create' | 'detail' | 'settings'>(() => {
+  const [currentView, setCurrentView] = useState<'list' | 'create' | 'detail' | 'settings' | 'history'>(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search)
       if (params.get('share')) return 'detail'
@@ -52,6 +52,7 @@ function App() {
       if (v === 'create') return 'create'
       if (v === 'detail') return 'detail'
       if (v === 'settings') return 'settings'
+      if (v === 'history') return 'history'
     }
     return 'list'
   })
@@ -126,6 +127,13 @@ function App() {
     if (typeof window !== 'undefined') window.history.replaceState({}, '', '/?view=settings')
   }
 
+  const goToHistory = () => {
+    setCurrentView('history')
+    setSelectedTask(null)
+    setOpenedFromShare(false)
+    if (typeof window !== 'undefined') window.history.replaceState({}, '', '/?view=history')
+  }
+
   const shareTask = async () => {
     if (!selectedTask) return
     const payload = btoa(encodeURIComponent(JSON.stringify(selectedTask)))
@@ -193,6 +201,7 @@ function App() {
   const navItems = [
     { id: 'list', label: 'All Tasks', icon: <Home className="w-4 h-4" /> },
     { id: 'create', label: 'New Task', icon: <FileText className="w-4 h-4" /> },
+    { id: 'history', label: 'History', icon: <BarChart3 className="w-4 h-4" /> },
     { id: 'settings', label: 'Settings', icon: <Settings className="w-4 h-4" /> },
   ]
 
@@ -217,6 +226,7 @@ function App() {
               onClick={() => {
                 if (item.id === 'create') goToCreate()
                 else if (item.id === 'settings') goToSettings()
+                else if (item.id === 'history') goToHistory()
                 else goToList()
               }}
               className={`w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors ${
@@ -479,6 +489,19 @@ function App() {
                   <div className="text-sm text-[var(--fgm-text-secondary)]">Version 0.1.0 • FigJam-driven workflow demo</div>
                 </Card>
               </div>
+            </div>
+          )}
+
+          {/* HISTORY VIEW — shell (#29). Stats content lands in #30 (status breakdown) and #31 (due-date insights). */}
+          {currentView === 'history' && (
+            <div className="max-w-3xl">
+              <h1 className="text-2xl font-semibold mb-1">History</h1>
+              <p className="text-sm text-[var(--fgm-text-secondary)] mb-6">Stats about your tasks.</p>
+              <Card>
+                <p className="text-sm text-[var(--fgm-text-secondary)]">
+                  Stats coming soon — status breakdown and due-date insights.
+                </p>
+              </Card>
             </div>
           )}
         </div>
