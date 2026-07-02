@@ -698,10 +698,6 @@ function App() {
             </div>
           )}
         </div>
-
-        <footer className="border-t border-[var(--fgm-border)] px-8 py-4 text-xs text-[var(--fgm-text-secondary)]">
-          MakeJam — a simple task tracker
-        </footer>
       </div>
     </div>
   )
