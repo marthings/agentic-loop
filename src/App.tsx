@@ -99,6 +99,21 @@ function App() {
     done: filteredTasks.filter(t => t.status === 'Done').length,
   }
 
+  const historyStats = {
+    total: tasks.length,
+    todo: tasks.filter(t => t.status === 'Todo').length,
+    inProgress: tasks.filter(t => t.status === 'In Progress').length,
+    done: tasks.filter(t => t.status === 'Done').length,
+  }
+  const completionRate = historyStats.total === 0
+    ? 0
+    : Math.round((historyStats.done / historyStats.total) * 100)
+  const statusBreakdown = [
+    { status: 'Todo' as const, count: historyStats.todo, color: 'var(--fgm-warning)' },
+    { status: 'In Progress' as const, count: historyStats.inProgress, color: 'var(--fgm-accent)' },
+    { status: 'Done' as const, count: historyStats.done, color: 'var(--fgm-success)' },
+  ]
+
   const openDetail = (task: Task) => {
     setSelectedTask(task)
     setForm({ title: task.title, description: task.description, status: task.status, dueDate: task.dueDate })
@@ -492,16 +507,68 @@ function App() {
             </div>
           )}
 
-          {/* HISTORY VIEW — shell (#29). Stats content lands in #30 (status breakdown) and #31 (due-date insights). */}
+          {/* HISTORY VIEW — status breakdown (#30). Due-date insights land in #31. */}
           {currentView === 'history' && (
             <div className="max-w-3xl">
-              <h1 className="text-2xl font-semibold mb-1">History</h1>
-              <p className="text-sm text-[var(--fgm-text-secondary)] mb-6">Stats about your tasks.</p>
-              <Card>
-                <p className="text-sm text-[var(--fgm-text-secondary)]">
-                  Stats coming soon — status breakdown and due-date insights.
-                </p>
-              </Card>
+              <h1 className="text-title mb-1">History</h1>
+              <p className="text-body text-[var(--fgm-text-secondary)] mb-6">See how your tasks are progressing.</p>
+
+              {historyStats.total === 0 ? (
+                <Card>
+                  <h2 className="text-heading mb-1">No task data yet</h2>
+                  <p className="text-body text-[var(--fgm-text-secondary)]">
+                    Create a task to start tracking your progress.
+                  </p>
+                </Card>
+              ) : (
+                <div className="space-y-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <Card>
+                      <p className="text-caption text-[var(--fgm-text-secondary)] mb-2">Total tasks</p>
+                      <p className="text-display">{historyStats.total}</p>
+                    </Card>
+                    <Card>
+                      <p className="text-caption text-[var(--fgm-text-secondary)] mb-2">Completion rate</p>
+                      <p className="text-display">{completionRate}%</p>
+                    </Card>
+                  </div>
+
+                  <Card>
+                    <div className="flex items-start justify-between gap-4 mb-6">
+                      <div>
+                        <h2 className="text-heading">Status breakdown</h2>
+                        <p className="text-body text-[var(--fgm-text-secondary)]">Distribution across all tasks.</p>
+                      </div>
+                      <span className="text-label">{historyStats.done} of {historyStats.total} done</span>
+                    </div>
+
+                    <div
+                      className="flex h-3 overflow-hidden rounded-[var(--fgm-radius-sm)] bg-[var(--fgm-bg-secondary)] mb-6"
+                      role="img"
+                      aria-label={`${historyStats.todo} todo, ${historyStats.inProgress} in progress, ${historyStats.done} done`}
+                    >
+                      {statusBreakdown.map(item => item.count > 0 && (
+                        <div
+                          key={item.status}
+                          style={{
+                            backgroundColor: item.color,
+                            width: `${(item.count / historyStats.total) * 100}%`,
+                          }}
+                        />
+                      ))}
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      {statusBreakdown.map(item => (
+                        <div key={item.status} className="flex items-center justify-between gap-3">
+                          <StatusBadge status={item.status} />
+                          <span className="text-heading">{item.count}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </Card>
+                </div>
+              )}
             </div>
           )}
         </div>
