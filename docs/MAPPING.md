@@ -19,6 +19,7 @@ Process is in [`WORKFLOW.md`](./WORKFLOW.md): **add page to FigJam → write cod
 | New Task | `/?view=create` | `src/App.tsx` — `currentView === 'create'` | [node 3:2](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=3-2) |
 | Task Detail | `/?view=detail` · `/?share=…` | `src/App.tsx` — `currentView === 'detail'` (incl. Share link) | [node 31:2](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=31-2) |
 | Settings | `/?view=settings` | `src/App.tsx` — `currentView === 'settings'` (incl. dark mode toggle) | [node 28:2](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=28-2) |
+| History & Stats | `/?view=history` | `src/App.tsx` — `currentView === 'history'` (shell; stats in #30/#31) | _pending capture (#32)_ |
 
 When a new page is added to the sitemap, add a row here. After re-capturing, the frame node id may change — update the link.
 
