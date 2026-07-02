@@ -32,6 +32,7 @@ Reusable components live in `src/components/`, are built as real Figma component
 | Button | `src/components/Button.tsx` | [20:7](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=20-7) (Primary/Secondary) | `Button.figma.tsx` |
 | Card | `src/components/Card.tsx` | [23:2](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=23-2) | `Card.figma.tsx` |
 | StatusBadge | `src/components/StatusBadge.tsx` | [23:10](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=23-10) (Todo/In Progress/Done) | `StatusBadge.figma.tsx` |
+| Dropdown | `src/components/Dropdown.tsx` | [106:20](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=106-20) (Closed/Open, TEXT prop `Label`) | `Dropdown.figma.tsx` |
 
 **This table + the `.figma.tsx` files are our canonical mapping** — they don't depend on Code Connect
 being enabled. The `.figma.tsx` files are precise and machine-readable even unpublished (component →
