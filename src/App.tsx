@@ -114,6 +114,37 @@ function App() {
     { status: 'Done' as const, count: historyStats.done, color: 'var(--fgm-success)' },
   ]
 
+  // Due-date insights (#31) — dueDate is 'YYYY-MM-DD', so string compare against local today works
+  const pad2 = (n: number) => String(n).padStart(2, '0')
+  const now = new Date()
+  const todayStr = `${now.getFullYear()}-${pad2(now.getMonth() + 1)}-${pad2(now.getDate())}`
+  const soon = new Date(now)
+  soon.setDate(soon.getDate() + 7)
+  const soonStr = `${soon.getFullYear()}-${pad2(soon.getMonth() + 1)}-${pad2(soon.getDate())}`
+  const dueDateBuckets = [
+    {
+      key: 'overdue',
+      label: 'Overdue',
+      color: 'var(--fgm-danger)',
+      tasks: tasks.filter(t => t.dueDate && t.dueDate < todayStr && t.status !== 'Done'),
+      emptyText: 'Nothing overdue — nice work.',
+    },
+    {
+      key: 'due-soon',
+      label: 'Due soon',
+      color: 'var(--fgm-warning)',
+      tasks: tasks.filter(t => t.dueDate && t.dueDate >= todayStr && t.dueDate <= soonStr && t.status !== 'Done'),
+      emptyText: 'Nothing due in the next 7 days.',
+    },
+    {
+      key: 'no-due-date',
+      label: 'No due date',
+      color: 'var(--fgm-text-secondary)',
+      tasks: tasks.filter(t => !t.dueDate),
+      emptyText: 'Every task has a due date.',
+    },
+  ]
+
   const openDetail = (task: Task) => {
     setSelectedTask(task)
     setForm({ title: task.title, description: task.description, status: task.status, dueDate: task.dueDate })
@@ -507,7 +538,7 @@ function App() {
             </div>
           )}
 
-          {/* HISTORY VIEW — status breakdown (#30). Due-date insights land in #31. */}
+          {/* HISTORY VIEW — status breakdown (#30) + due-date insights (#31) */}
           {currentView === 'history' && (
             <div className="max-w-3xl">
               <h1 className="text-title mb-1">History</h1>
@@ -563,6 +594,45 @@ function App() {
                         <div key={item.status} className="flex items-center justify-between gap-3">
                           <StatusBadge status={item.status} />
                           <span className="text-heading">{item.count}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </Card>
+
+                  {/* Due-date insights (#31) */}
+                  <Card>
+                    <div className="mb-6">
+                      <h2 className="text-heading">Due-date insights</h2>
+                      <p className="text-body text-[var(--fgm-text-secondary)]">Where your deadlines stand today.</p>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                      {dueDateBuckets.map(bucket => (
+                        <div key={bucket.key}>
+                          <div className="flex items-center gap-2 mb-2">
+                            <span
+                              aria-hidden="true"
+                              className="inline-block w-2 h-2 rounded-full"
+                              style={{ backgroundColor: bucket.color }}
+                            />
+                            <span className="text-caption text-[var(--fgm-text-secondary)]">{bucket.label}</span>
+                          </div>
+                          <p className="text-display mb-2">{bucket.tasks.length}</p>
+                          {bucket.tasks.length === 0 ? (
+                            <p className="text-caption text-[var(--fgm-text-secondary)]">{bucket.emptyText}</p>
+                          ) : (
+                            <ul className="space-y-1">
+                              {bucket.tasks.slice(0, 3).map(t => (
+                                <li key={t.id} className="text-caption flex items-center justify-between gap-2">
+                                  <span className="truncate">{t.title}</span>
+                                  {t.dueDate && <span className="text-[var(--fgm-text-secondary)] shrink-0">{t.dueDate}</span>}
+                                </li>
+                              ))}
+                              {bucket.tasks.length > 3 && (
+                                <li className="text-caption text-[var(--fgm-text-secondary)]">+{bucket.tasks.length - 3} more</li>
+                              )}
+                            </ul>
+                          )}
                         </div>
                       ))}
                     </div>
