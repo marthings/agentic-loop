@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { BarChart3, FileText, Home, Layers, Settings } from 'lucide-react'
+import { ArrowDown, ArrowUp, ArrowUpDown, BarChart3, FileText, Home, Layers, Settings } from 'lucide-react'
 import { Button } from './components/Button'
 import { Card } from './components/Card'
 import { Dropdown } from './components/Dropdown'
@@ -99,6 +99,17 @@ function App() {
       (t.title.toLowerCase().includes(q) || t.description.toLowerCase().includes(q)) &&
       (statusFilter === 'All' || t.status === statusFilter)
     )
+
+  // Due-date sort (#4) — cycles asc → desc → off from the Due column header
+  const [dueSort, setDueSort] = useState<'none' | 'asc' | 'desc'>('none')
+  const cycleDueSort = () => setDueSort(s => (s === 'none' ? 'asc' : s === 'asc' ? 'desc' : 'none'))
+  const sortedTasks = dueSort === 'none'
+    ? filteredTasks
+    : [...filteredTasks].sort((a, b) => {
+        if (!a.dueDate) return 1
+        if (!b.dueDate) return -1
+        return dueSort === 'asc' ? a.dueDate.localeCompare(b.dueDate) : b.dueDate.localeCompare(a.dueDate)
+      })
 
   // Stats reflect the current search/filter (the visible list), not the full set
   const stats = {
@@ -401,13 +412,25 @@ function App() {
                       </th>
                       <th className="p-3">Title</th>
                       <th className="p-3">Status</th>
-                      <th className="p-3">Due</th>
+                      <th className="p-3">
+                        <button
+                          type="button"
+                          onClick={cycleDueSort}
+                          aria-label={`Sort by due date${dueSort === 'asc' ? ', ascending' : dueSort === 'desc' ? ', descending' : ''}`}
+                          className="inline-flex items-center gap-1 font-semibold hover:text-[var(--fgm-accent)]"
+                        >
+                          Due
+                          {dueSort === 'asc' ? <ArrowUp className="w-3.5 h-3.5" />
+                            : dueSort === 'desc' ? <ArrowDown className="w-3.5 h-3.5" />
+                            : <ArrowUpDown className="w-3.5 h-3.5 text-[var(--fgm-text-secondary)]" />}
+                        </button>
+                      </th>
                       <th className="p-3"></th>
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredTasks.length === 0 && <tr><td colSpan={5} className="p-4 text-center text-[var(--fgm-text-secondary)]">No tasks found.</td></tr>}
-                    {filteredTasks.map(task => (
+                    {sortedTasks.length === 0 && <tr><td colSpan={5} className="p-4 text-center text-[var(--fgm-text-secondary)]">No tasks found.</td></tr>}
+                    {sortedTasks.map(task => (
                       <tr key={task.id} onClick={() => openDetail(task)} className="border-b border-[var(--fgm-border)] last:border-0 hover:bg-[var(--fgm-bg-secondary)] cursor-pointer">
                         <td className="p-3" onClick={e => e.stopPropagation()}>
                           <input
