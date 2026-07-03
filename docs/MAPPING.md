@@ -15,7 +15,7 @@ Process is in [`WORKFLOW.md`](./WORKFLOW.md): **add page to FigJam → write cod
 
 | Page | Dev URL | Code | Figma frame |
 |------|---------|------|-------------|
-| Home / Task List | `/` | `src/App.tsx` — `currentView === 'list'` (incl. multi-select bulk delete) | [node 114:2](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=114-2) |
+| Home / Task List | `/` | `src/App.tsx` — `currentView === 'list'` (incl. multi-select bulk delete, due-date sort #4) | [node 138:20](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=138-20) |
 | New Task | `/?view=create` | `src/App.tsx` — `currentView === 'create'` | [node 115:2](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=115-2) |
 | Task Detail | `/?view=detail` · `/?share=…` | `src/App.tsx` — `currentView === 'detail'` (incl. Share link) | [node 116:2](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=116-2) |
 | Settings | `/?view=settings` | `src/App.tsx` — `currentView === 'settings'` (incl. dark mode toggle) | [node 117:2](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=117-2) |
