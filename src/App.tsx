@@ -28,6 +28,12 @@ function parseLabels(raw: string): string[] {
   return [...new Set(raw.split(',').map(s => s.trim().toLowerCase()).filter(Boolean))]
 }
 
+const statusOptions: { value: TaskStatus; label: string }[] = [
+  { value: 'Todo', label: 'Todo' },
+  { value: 'In Progress', label: 'In Progress' },
+  { value: 'Done', label: 'Done' },
+]
+
 // Share: a task encoded into a ?share= link, decoded on load
 function decodeSharedTask(): Task | null {
   if (typeof window === 'undefined') return null
@@ -503,11 +509,13 @@ function App() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm mb-1">Status</label>
-                    <select value={form.status} onChange={e => setForm({...form, status: e.target.value as any})} className="w-full border border-[var(--fgm-border)] rounded px-3 py-2">
-                      <option>Todo</option>
-                      <option>In Progress</option>
-                      <option>Done</option>
-                    </select>
+                    <Dropdown
+                      value={form.status}
+                      onChange={v => setForm({ ...form, status: v })}
+                      ariaLabel="Status"
+                      className="w-full"
+                      options={statusOptions}
+                    />
                   </div>
                   <div>
                     <label className="block text-sm mb-1">Due Date</label>
@@ -551,11 +559,13 @@ function App() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm mb-1">Status</label>
-                    <select value={form.status} onChange={e => setForm({...form, status: e.target.value as any})} className="w-full border border-[var(--fgm-border)] rounded px-3 py-2">
-                      <option>Todo</option>
-                      <option>In Progress</option>
-                      <option>Done</option>
-                    </select>
+                    <Dropdown
+                      value={form.status}
+                      onChange={v => setForm({ ...form, status: v })}
+                      ariaLabel="Status"
+                      className="w-full"
+                      options={statusOptions}
+                    />
                   </div>
                   <div>
                     <label className="block text-sm mb-1">Due Date</label>
@@ -601,15 +611,13 @@ function App() {
                 <Card>
                   <label className="block text-sm font-medium mb-1">Default status for new tasks</label>
                   <p className="text-xs text-[var(--fgm-text-secondary)] mb-3">New tasks start with this status pre-selected.</p>
-                  <select
+                  <Dropdown
                     value={defaultStatus}
-                    onChange={e => setDefaultStatus(e.target.value as TaskStatus)}
-                    className="w-full border border-[var(--fgm-border)] rounded px-3 py-2"
-                  >
-                    <option>Todo</option>
-                    <option>In Progress</option>
-                    <option>Done</option>
-                  </select>
+                    onChange={v => setDefaultStatus(v as TaskStatus)}
+                    ariaLabel="Default status"
+                    className="w-full"
+                    options={statusOptions}
+                  />
                 </Card>
 
                 {/* Clear all tasks */}

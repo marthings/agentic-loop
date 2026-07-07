@@ -16,13 +16,13 @@ Process is in [`WORKFLOW.md`](./WORKFLOW.md): **add page to FigJam → write cod
 | Page | Dev URL | Code | Figma frame |
 |------|---------|------|-------------|
 | Home / Task List | `/` | `src/App.tsx` — `currentView === 'list'` (incl. multi-select bulk delete, due-date sort #4, label filter #5) | [node 150:20](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=150-20) |
-| New Task | `/?view=create` | `src/App.tsx` — `currentView === 'create'` (incl. labels input #5) | [node 151:20](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=151-20) |
-| Task Detail | `/?view=detail` · `/?share=…` | `src/App.tsx` — `currentView === 'detail'` (incl. Share link, labels input #5) | [node 152:20](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=152-20) |
-| Settings | `/?view=settings` | `src/App.tsx` — `currentView === 'settings'` (incl. dark mode toggle) | [node 117:2](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=117-2) |
+| New Task | `/?view=create` | `src/App.tsx` — `currentView === 'create'` (incl. labels input #5, status uses Dropdown #45) | [node 151:20](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=151-20) |
+| Task Detail | `/?view=detail` · `/?share=…` | `src/App.tsx` — `currentView === 'detail'` (incl. Share link, labels input #5, status uses Dropdown #45) | [node 152:20](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=152-20) |
+| Settings | `/?view=settings` | `src/App.tsx` — `currentView === 'settings'` (incl. dark mode toggle, default status uses Dropdown #45) | [node 117:2](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=117-2) |
 | History & Stats | `/?view=history` | `src/App.tsx` — `currentView === 'history'` (status breakdown #30 + due-date insights #31 + activity #33) | [node 118:2](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=118-2) |
 
 All five frames are bound to the variables/text styles **and componentized** — captured
-buttons/badges/the status dropdown are instances of the library components (Button, StatusBadge,
+buttons/badges/the status dropdown (list filter + form fields) are instances of the library components (Button, StatusBadge,
 Dropdown). A re-capture wipes bindings, styles **and** instances — re-run all three passes.
 
 When a new page is added to the sitemap, add a row here. After re-capturing, the frame node id may change — update the link.
@@ -51,4 +51,4 @@ Organization/Enterprise plan with a Dev or Full seat (this file is on a Pro team
 files are already in the right format; nothing to rewrite. They're excluded from the app build via
 `tsconfig.app.json`.
 
-_Last updated: 2026-07-02_
+_Last updated: 2026-07-07_ (unified status selects to Dropdown in forms, #45)
