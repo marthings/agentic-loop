@@ -3,6 +3,7 @@ import { ArrowDown, ArrowUp, ArrowUpDown, BarChart3, FileText, Home, Layers, Set
 import { Button } from './components/Button'
 import { Card } from './components/Card'
 import { Dropdown } from './components/Dropdown'
+import { Tag } from './components/Tag'
 import { StatusBadge, type TaskStatus } from './components/StatusBadge'
 
 interface Task {
@@ -13,13 +14,19 @@ interface Task {
   dueDate: string
   createdAt: string
   completedAt: string | null
+  labels: string[]
 }
 
 const initialTasks: Task[] = [
-  { id: 1, title: 'Setup project structure', description: 'Initialize Vite + TS + Tailwind', status: 'Done', dueDate: '2026-06-20', createdAt: '2026-06-15', completedAt: '2026-06-19' },
-  { id: 2, title: 'Design tokens in CSS', description: 'Define color, spacing, radius vars', status: 'In Progress', dueDate: '2026-06-28', createdAt: '2026-06-18', completedAt: null },
-  { id: 3, title: 'List view with search', description: 'Build tasks table + filters', status: 'Todo', dueDate: '2026-07-01', createdAt: '2026-06-25', completedAt: null },
+  { id: 1, title: 'Setup project structure', description: 'Initialize Vite + TS + Tailwind', status: 'Done', dueDate: '2026-06-20', createdAt: '2026-06-15', completedAt: '2026-06-19', labels: ['infra'] },
+  { id: 2, title: 'Design tokens in CSS', description: 'Define color, spacing, radius vars', status: 'In Progress', dueDate: '2026-06-28', createdAt: '2026-06-18', completedAt: null, labels: ['design', 'tokens'] },
+  { id: 3, title: 'List view with search', description: 'Build tasks table + filters', status: 'Todo', dueDate: '2026-07-01', createdAt: '2026-06-25', completedAt: null, labels: ['frontend'] },
 ]
+
+// 'design, Frontend , design' → ['design', 'frontend']
+function parseLabels(raw: string): string[] {
+  return [...new Set(raw.split(',').map(s => s.trim().toLowerCase()).filter(Boolean))]
+}
 
 // Share: a task encoded into a ?share= link, decoded on load
 function decodeSharedTask(): Task | null {
@@ -32,6 +39,7 @@ function decodeSharedTask(): Task | null {
     return {
       createdAt: new Date().toISOString().split('T')[0],
       completedAt: null,
+      labels: [],
       ...parsed,
     } as Task
   } catch {
@@ -89,15 +97,19 @@ function App() {
   // Form state for create/edit
   const [form, setForm] = useState(() =>
     initialSelected
-      ? { title: initialSelected.title, description: initialSelected.description, status: initialSelected.status, dueDate: initialSelected.dueDate }
-      : { title: '', description: '', status: 'Todo' as Task['status'], dueDate: '' }
+      ? { title: initialSelected.title, description: initialSelected.description, status: initialSelected.status, dueDate: initialSelected.dueDate, labels: initialSelected.labels.join(', ') }
+      : { title: '', description: '', status: 'Todo' as Task['status'], dueDate: '', labels: '' }
   )
+
+  // Label filter (#5) — click a chip to filter by that label
+  const [labelFilter, setLabelFilter] = useState<string | null>(null)
 
   const q = searchTerm.trim().toLowerCase()
   const filteredTasks = tasks
     .filter(t =>
       (t.title.toLowerCase().includes(q) || t.description.toLowerCase().includes(q)) &&
-      (statusFilter === 'All' || t.status === statusFilter)
+      (statusFilter === 'All' || t.status === statusFilter) &&
+      (!labelFilter || t.labels.includes(labelFilter))
     )
 
   // Due-date sort (#4) — cycles asc → desc → off from the Due column header
@@ -177,7 +189,7 @@ function App() {
 
   const openDetail = (task: Task) => {
     setSelectedTask(task)
-    setForm({ title: task.title, description: task.description, status: task.status, dueDate: task.dueDate })
+    setForm({ title: task.title, description: task.description, status: task.status, dueDate: task.dueDate, labels: task.labels.join(', ') })
     setCurrentView('detail')
     setOpenedFromShare(false)
   }
@@ -185,13 +197,13 @@ function App() {
   const goToList = () => {
     setCurrentView('list')
     setSelectedTask(null)
-    setForm({ title: '', description: '', status: 'Todo', dueDate: '' })
+    setForm({ title: '', description: '', status: 'Todo', dueDate: '', labels: '' })
     setOpenedFromShare(false)
     if (typeof window !== 'undefined') window.history.replaceState({}, '', '/')
   }
 
   const goToCreate = () => {
-    setForm({ title: '', description: '', status: defaultStatus, dueDate: '' })
+    setForm({ title: '', description: '', status: defaultStatus, dueDate: '', labels: '' })
     setCurrentView('create')
     if (typeof window !== 'undefined') window.history.replaceState({}, '', '/?view=create')
   }
@@ -239,6 +251,7 @@ function App() {
       dueDate: form.dueDate || new Date().toISOString().split('T')[0],
       createdAt: todayStr,
       completedAt: form.status === 'Done' ? todayStr : null,
+      labels: parseLabels(form.labels),
     }
     setTasks([...tasks, newTask])
     goToList()
@@ -255,6 +268,7 @@ function App() {
             description: form.description.trim(),
             status: form.status,
             dueDate: form.dueDate,
+            labels: parseLabels(form.labels),
             // status → Done stamps completedAt (kept if already Done); leaving Done clears it
             completedAt: form.status === 'Done' ? (t.completedAt ?? todayStr) : null,
           }
@@ -389,6 +403,9 @@ function App() {
                     { value: 'Done', label: 'Done' },
                   ]}
                 />
+                {labelFilter && (
+                  <Tag label={`${labelFilter} ✕`} selected onClick={() => setLabelFilter(null)} />
+                )}
                 {selectedIds.length > 0 && (
                   <Button variant="secondary" onClick={deleteSelected} className="border border-[var(--fgm-border)]">
                     Delete selected ({selectedIds.length})
@@ -440,7 +457,19 @@ function App() {
                             aria-label={`Select ${task.title}`}
                           />
                         </td>
-                        <td className="p-3 font-medium">{task.title}</td>
+                        <td className="p-3 font-medium">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            {task.title}
+                            {task.labels.map(l => (
+                              <Tag
+                                key={l}
+                                label={l}
+                                selected={l === labelFilter}
+                                onClick={e => { e.stopPropagation(); setLabelFilter(f => (f === l ? null : l)) }}
+                              />
+                            ))}
+                          </div>
+                        </td>
                         <td className="p-3">
                           <StatusBadge status={task.status} />
                         </td>
@@ -485,6 +514,10 @@ function App() {
                     <input type="date" value={form.dueDate} onChange={e => setForm({...form, dueDate: e.target.value})} className="w-full border border-[var(--fgm-border)] rounded px-3 py-2" />
                   </div>
                 </div>
+                <div>
+                  <label className="block text-sm mb-1">Labels</label>
+                  <input value={form.labels} onChange={e => setForm({...form, labels: e.target.value})} placeholder="design, frontend" className="w-full border border-[var(--fgm-border)] rounded px-3 py-2" />
+                </div>
                 <div className="flex gap-3 pt-2">
                   <Button type="button" variant="secondary" onClick={goToList} className="flex-1">Cancel</Button>
                   <Button type="submit" variant="primary" className="flex-1">Create Task</Button>
@@ -528,6 +561,10 @@ function App() {
                     <label className="block text-sm mb-1">Due Date</label>
                     <input type="date" value={form.dueDate} onChange={e => setForm({...form, dueDate: e.target.value})} className="w-full border border-[var(--fgm-border)] rounded px-3 py-2" />
                   </div>
+                </div>
+                <div>
+                  <label className="block text-sm mb-1">Labels</label>
+                  <input value={form.labels} onChange={e => setForm({...form, labels: e.target.value})} placeholder="design, frontend" className="w-full border border-[var(--fgm-border)] rounded px-3 py-2" />
                 </div>
                 <div className="flex flex-wrap gap-3 pt-2 items-center">
                   <Button type="button" variant="secondary" onClick={handleDelete}>Delete</Button>
