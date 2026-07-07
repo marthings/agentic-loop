@@ -115,6 +115,26 @@ body {
   color: var(--fgm-accent);
 }
 
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px var(--fgm-space-2);
+  border-radius: 999px;
+  font-size: var(--fgm-text-caption-size);
+  line-height: var(--fgm-text-caption-line);
+  background-color: var(--fgm-bg-secondary);
+  color: var(--fgm-text-secondary);
+}
+
+button.tag {
+  cursor: pointer;
+}
+
+.tag-selected {
+  background-color: var(--fgm-accent-light);
+  color: var(--fgm-accent);
+}
+
 .dropdown {
   position: relative;
 }

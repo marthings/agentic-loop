@@ -15,9 +15,9 @@ Process is in [`WORKFLOW.md`](./WORKFLOW.md): **add page to FigJam → write cod
 
 | Page | Dev URL | Code | Figma frame |
 |------|---------|------|-------------|
-| Home / Task List | `/` | `src/App.tsx` — `currentView === 'list'` (incl. multi-select bulk delete, due-date sort #4) | [node 138:20](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=138-20) |
-| New Task | `/?view=create` | `src/App.tsx` — `currentView === 'create'` | [node 115:2](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=115-2) |
-| Task Detail | `/?view=detail` · `/?share=…` | `src/App.tsx` — `currentView === 'detail'` (incl. Share link) | [node 116:2](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=116-2) |
+| Home / Task List | `/` | `src/App.tsx` — `currentView === 'list'` (incl. multi-select bulk delete, due-date sort #4, label filter #5) | [node 150:20](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=150-20) |
+| New Task | `/?view=create` | `src/App.tsx` — `currentView === 'create'` (incl. labels input #5) | [node 151:20](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=151-20) |
+| Task Detail | `/?view=detail` · `/?share=…` | `src/App.tsx` — `currentView === 'detail'` (incl. Share link, labels input #5) | [node 152:20](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=152-20) |
 | Settings | `/?view=settings` | `src/App.tsx` — `currentView === 'settings'` (incl. dark mode toggle) | [node 117:2](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=117-2) |
 | History & Stats | `/?view=history` | `src/App.tsx` — `currentView === 'history'` (status breakdown #30 + due-date insights #31 + activity #33) | [node 118:2](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=118-2) |
 
@@ -37,6 +37,7 @@ Reusable components live in `src/components/`, are built as real Figma component
 | Card | `src/components/Card.tsx` | [23:2](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=23-2) | `Card.figma.tsx` |
 | StatusBadge | `src/components/StatusBadge.tsx` | [23:10](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=23-10) (Todo/In Progress/Done) | `StatusBadge.figma.tsx` |
 | Dropdown | `src/components/Dropdown.tsx` | [106:20](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=106-20) (Closed/Open, TEXT prop `Label`) | `Dropdown.figma.tsx` |
+| Tag | `src/components/Tag.tsx` | [147:24](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=147-24) (Default/Selected, TEXT prop `Label`) | `Tag.figma.tsx` |
 
 **This table + the `.figma.tsx` files are our canonical mapping** — they don't depend on Code Connect
 being enabled. The `.figma.tsx` files are precise and machine-readable even unpublished (component →
