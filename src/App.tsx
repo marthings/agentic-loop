@@ -83,8 +83,17 @@ function App() {
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState<'All' | Task['status']>('All')
   // List: ids of tasks selected for bulk actions
-  const [selectedIds, setSelectedIds] = useState<number[]>([])
-  const [bulkDeleteConfirm, setBulkDeleteConfirm] = useState(false)
+  const [selectedIds, setSelectedIds] = useState<number[]>(() => {
+    if (typeof window === 'undefined') return []
+    if (new URLSearchParams(window.location.search).get('bulkDelete')) {
+      return initialTasks.map(t => t.id)
+    }
+    return []
+  })
+  const [bulkDeleteConfirm, setBulkDeleteConfirm] = useState(() => {
+    if (typeof window === 'undefined') return false
+    return new URLSearchParams(window.location.search).get('bulkDelete') === '1'
+  })
   const [createErrors, setCreateErrors] = useState<{ title?: string }>({})
   // Settings: default status applied to newly created tasks
   const [defaultStatus, setDefaultStatus] = useState<Task['status']>('Todo')
