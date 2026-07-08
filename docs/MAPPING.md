@@ -15,17 +15,17 @@ Process is in [`WORKFLOW.md`](./WORKFLOW.md): **add page to FigJam → write cod
 
 | Page | Dev URL | Code | Figma frame |
 |------|---------|------|-------------|
-| Home / Task List | `/` | `src/App.tsx` — `currentView === 'list'` (incl. multi-select bulk delete w/ in-app confirm #13, due-date sort #4, label filter #5; sidebar without Quick Stats, #47) | [node 208:54](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=208-54) |
-| Home / Task List + success banner | `/?view=list&success=1` | `src/App.tsx` — `currentView === 'list'` with success feedback banner visible (from #11; seed for capture) | [node 182:13](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=182-13) |
-| Home / Task List + bulk delete confirm | `/?view=list&bulkDelete=1` | `src/App.tsx` — `currentView === 'list'` with all tasks selected + bulk-delete `alertdialog` open (#13; seed for capture) | [node 210:54](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=210-54) |
-| New Task | `/?view=create` | `src/App.tsx` — `currentView === 'create'` (labels #5, Dropdown #45, due-date hint #9, inline validation #10) | [node 212:69](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=212-69) |
-| Task Detail | `/?view=detail` · `/?share=…` | `src/App.tsx` — `currentView === 'detail'` (Share link, labels #5, Dropdown #45, due-date hint #9) | [node 213:69](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=213-69) |
-| Settings | `/?view=settings` | `src/App.tsx` — `currentView === 'settings'` (incl. dark mode toggle, default status uses Dropdown #45) | [node 186:45](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=186-45) |
-| History & Stats | `/?view=history` | `src/App.tsx` — `currentView === 'history'` (status breakdown #30 + due-date insights #31 + activity #33) | [node 187:45](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=187-45) |
+| Home / Task List | `/` | `src/App.tsx` — `currentView === 'list'` (incl. multi-select bulk delete w/ in-app confirm #13, due-date sort #4, label filter #5; sidebar: All Tasks / History / Settings only, #8) | [node 216:69](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=216-69) |
+| Home / Task List + success banner | `/?view=list&success=1` | `src/App.tsx` — `currentView === 'list'` with success feedback banner visible (from #11; seed for capture) | [node 217:69](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=217-69) |
+| Home / Task List + bulk delete confirm | `/?view=list&bulkDelete=1` | `src/App.tsx` — `currentView === 'list'` with all tasks selected + bulk-delete `alertdialog` open (#13; seed for capture) | [node 218:69](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=218-69) |
+| New Task | `/?view=create` | `src/App.tsx` — `currentView === 'create'` (labels #5, Dropdown #45, due-date hint #9, inline validation #10) | [node 219:69](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=219-69) |
+| Task Detail | `/?view=detail` · `/?share=…` | `src/App.tsx` — `currentView === 'detail'` (Share link, labels #5, Dropdown #45, due-date hint #9) | [node 220:69](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=220-69) |
+| Settings | `/?view=settings` | `src/App.tsx` — `currentView === 'settings'` (incl. dark mode toggle, default status uses Dropdown #45) | [node 221:69](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=221-69) |
+| History & Stats | `/?view=history` | `src/App.tsx` — `currentView === 'history'` (status breakdown #30 + due-date insights #31 + activity #33) | [node 222:69](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=222-69) |
 
 All frames are bound to the variables/text styles **and componentized** where applicable. 
 
-**Overlays pattern:** For transient layers like success banners or bulk-delete confirm, capture the main view + seeded overlay state separately. **Captured frames must contain only the pure design** — no text or extra descriptions inside the frames. Place overlay frames **below** the main row (182:13 at y=913 below 208:54; 210:54 bulk-delete at x=1600, y=913). Only core views use the standard left-to-right layout. All notes go in this file and FigJam. See skill `capture.md`.
+**Overlays pattern:** For transient layers like success banners or bulk-delete confirm, capture the main view + seeded overlay state separately. **Captured frames must contain only the pure design** — no text or extra descriptions inside the frames. Place overlay frames **below** the main row (217:69 at y=913 below 216:69; 218:69 bulk-delete at x=1600, y=913). Only core views use the standard left-to-right layout. All notes go in this file and FigJam. See skill `capture.md`.
 
 When a new page is added to the sitemap, add a row here. After re-capturing, the frame node id may change — **update the link immediately** using the exact node-id from the capture response. Then run verify. Treat this as the final step of any capture work.
 
@@ -53,4 +53,4 @@ Organization/Enterprise plan with a Dev or Full seat (this file is on a Pro team
 files are already in the right format; nothing to rewrite. They're excluded from the app build via
 `tsconfig.app.json`.
 
-_Last updated: 2026-07-08_ (re-captured list/create/detail + bulk-delete overlay, closes #53/#55; `bulkDelete=1` capture seed)_
+_Last updated: 2026-07-09_ (re-captured all frames after sidebar New Task removal, closes #59)_
