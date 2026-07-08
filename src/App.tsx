@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ArrowDown, ArrowUp, ArrowUpDown, BarChart3, Home, Layers, Settings } from 'lucide-react'
+import { ArrowDown, ArrowUp, ArrowUpDown, BarChart3, Home, Layers, Settings, Tags } from 'lucide-react'
 import { Button } from './components/Button'
 import { Card } from './components/Card'
 import { Dropdown } from './components/Dropdown'
@@ -67,7 +67,7 @@ function App() {
       ? initialTasks[0]
       : null
   const initialSelected = sharedTask ?? initialDetail
-  const [currentView, setCurrentView] = useState<'list' | 'create' | 'detail' | 'settings' | 'history'>(() => {
+  const [currentView, setCurrentView] = useState<'list' | 'create' | 'detail' | 'settings' | 'history' | 'labels'>(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search)
       if (params.get('share')) return 'detail'
@@ -76,6 +76,7 @@ function App() {
       if (v === 'detail') return 'detail'
       if (v === 'settings') return 'settings'
       if (v === 'history') return 'history'
+      if (v === 'labels') return 'labels'
     }
     return 'list'
   })
@@ -137,7 +138,10 @@ function App() {
   )
 
   // Label filter (#5) — click a chip to filter by that label
-  const [labelFilter, setLabelFilter] = useState<string | null>(null)
+  const [labelFilter, setLabelFilter] = useState<string | null>(() => {
+    if (typeof window === 'undefined') return null
+    return new URLSearchParams(window.location.search).get('label')
+  })
 
   const q = searchTerm.trim().toLowerCase()
   const filteredTasks = tasks
@@ -229,11 +233,12 @@ function App() {
     setOpenedFromShare(false)
   }
 
-  const goToList = (options?: { success?: string; highlight?: number }) => {
+  const goToList = (options?: { success?: string; highlight?: number; label?: string }) => {
     setCurrentView('list')
     setSelectedTask(null)
     setForm({ title: '', description: '', status: 'Todo', dueDate: '', labels: '' })
     setOpenedFromShare(false)
+    setLabelFilter(options?.label ?? null)
     if (options?.success) {
       setSuccessMsg(options.success)
       if (options.highlight) setHighlightedId(options.highlight)
@@ -245,7 +250,18 @@ function App() {
       setSuccessMsg('')
       setHighlightedId(null)
     }
-    if (typeof window !== 'undefined') window.history.replaceState({}, '', '/')
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams()
+      if (options?.label) {
+        params.set('view', 'list')
+        params.set('label', options.label)
+      } else if (options?.success) {
+        params.set('view', 'list')
+        params.set('success', '1')
+      }
+      const qs = params.toString()
+      window.history.replaceState({}, '', qs ? `/?${qs}` : '/')
+    }
   }
 
   const goToCreate = () => {
@@ -274,6 +290,20 @@ function App() {
     setOpenedFromShare(false)
     if (typeof window !== 'undefined') window.history.replaceState({}, '', '/?view=history')
   }
+
+  const goToLabels = () => {
+    setSuccessMsg('')
+    setHighlightedId(null)
+    setCurrentView('labels')
+    setSelectedTask(null)
+    setOpenedFromShare(false)
+    if (typeof window !== 'undefined') window.history.replaceState({}, '', '/?view=labels')
+  }
+
+  const labelStats = [...tasks.reduce((map, task) => {
+    for (const label of task.labels) map.set(label, (map.get(label) || 0) + 1)
+    return map
+  }, new Map<string, number>()).entries()].sort((a, b) => a[0].localeCompare(b[0]))
 
   const shareTask = async () => {
     if (!selectedTask) return
@@ -367,6 +397,7 @@ function App() {
 
   const navItems = [
     { id: 'list', label: 'All Tasks', icon: <Home className="w-4 h-4" /> },
+    { id: 'labels', label: 'Labels', icon: <Tags className="w-4 h-4" /> },
     { id: 'history', label: 'History', icon: <BarChart3 className="w-4 h-4" /> },
     { id: 'settings', label: 'Settings', icon: <Settings className="w-4 h-4" /> },
   ]
@@ -392,6 +423,7 @@ function App() {
               onClick={() => {
                 if (item.id === 'settings') goToSettings()
                 else if (item.id === 'history') goToHistory()
+                else if (item.id === 'labels') goToLabels()
                 else goToList()
               }}
               className={`w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors ${
@@ -774,6 +806,39 @@ function App() {
                   <div className="text-sm text-[var(--fgm-text-secondary)]">Version 0.1.0 • FigJam-driven workflow demo</div>
                 </Card>
               </div>
+            </div>
+          )}
+
+          {/* LABELS VIEW */}
+          {currentView === 'labels' && (
+            <div className="max-w-2xl">
+              <h1 className="text-title mb-1">Labels</h1>
+              <p className="text-body text-[var(--fgm-text-secondary)] mb-6">
+                All labels used across your tasks. Click a label to filter the task list.
+              </p>
+
+              {labelStats.length === 0 ? (
+                <Card>
+                  <h2 className="text-heading mb-1">No labels yet</h2>
+                  <p className="text-body text-[var(--fgm-text-secondary)]">
+                    Add labels when creating or editing a task — they will show up here.
+                  </p>
+                </Card>
+              ) : (
+                <div className="space-y-3">
+                  {labelStats.map(([label, count]) => (
+                    <Card key={label} className="flex items-center justify-between gap-4">
+                      <Tag
+                        label={label}
+                        onClick={() => goToList({ label })}
+                      />
+                      <span className="text-caption text-[var(--fgm-text-secondary)] whitespace-nowrap">
+                        {count} task{count === 1 ? '' : 's'}
+                      </span>
+                    </Card>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 

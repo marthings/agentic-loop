@@ -22,8 +22,11 @@ Process is in [`WORKFLOW.md`](./WORKFLOW.md): **add page to FigJam → write cod
 | Task Detail | `/?view=detail` · `/?share=…` | `src/App.tsx` — `currentView === 'detail'` (Share link, labels #5, Dropdown #45, due-date hint #9) | [node 220:69](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=220-69) |
 | Settings | `/?view=settings` | `src/App.tsx` — `currentView === 'settings'` (incl. dark mode toggle, default status uses Dropdown #45) | [node 221:69](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=221-69) |
 | History & Stats | `/?view=history` | `src/App.tsx` — `currentView === 'history'` (status breakdown #30 + due-date insights #31 + activity #33) | [node 222:69](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=222-69) |
+| Labels | `/?view=labels` | `src/App.tsx` — `currentView === 'labels'` (label overview + click chip → `/?view=list&label={name}`; #61) | [node 227:68](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=227-68) |
 
-All frames are bound to the variables/text styles **and componentized** where applicable. 
+All frames are bound to the variables/text styles **and componentized** where applicable.
+
+**Interaction annotations (#61):** The Labels frame has native Dev Mode annotations — frame-level flow summary (blue **Interaction**) plus per-chip click → list-filter notes. Tag chips remain raw captures with orange **DS drift** notes (Tag not yet in componentize CONFIG). 
 
 **Overlays pattern:** For transient layers like success banners or bulk-delete confirm, capture the main view + seeded overlay state separately. **Captured frames must contain only the pure design** — no text or extra descriptions inside the frames. Place overlay frames **below** the main row (217:69 at y=913 below 216:69; 218:69 bulk-delete at x=1600, y=913). Only core views use the standard left-to-right layout. All notes go in this file and FigJam. See skill `capture.md`.
 
@@ -53,4 +56,4 @@ Organization/Enterprise plan with a Dev or Full seat (this file is on a Pro team
 files are already in the right format; nothing to rewrite. They're excluded from the app build via
 `tsconfig.app.json`.
 
-_Last updated: 2026-07-09_ (re-captured all frames after sidebar New Task removal, closes #59)_
+_Last updated: 2026-07-09_ (added Labels page + Figma Interaction annotations, closes #61; existing frames still show pre-Labels sidebar — re-capture follow-up pending)_
