@@ -85,6 +85,7 @@ function App() {
   // List: ids of tasks selected for bulk actions
   const [selectedIds, setSelectedIds] = useState<number[]>([])
   const [bulkDeleteConfirm, setBulkDeleteConfirm] = useState(false)
+  const [createErrors, setCreateErrors] = useState<{ title?: string }>({})
   // Settings: default status applied to newly created tasks
   const [defaultStatus, setDefaultStatus] = useState<Task['status']>('Todo')
   // Share: transient "copied" feedback + a notice when opened from a shared link
@@ -241,6 +242,7 @@ function App() {
   const goToCreate = () => {
     setSuccessMsg('')
     setHighlightedId(null)
+    setCreateErrors({})
     setForm({ title: '', description: '', status: defaultStatus, dueDate: '', labels: '' })
     setCurrentView('create')
     if (typeof window !== 'undefined') window.history.replaceState({}, '', '/?view=create')
@@ -284,7 +286,11 @@ function App() {
 
   const handleCreate = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!form.title.trim()) return
+    if (!form.title.trim()) {
+      setCreateErrors({ title: 'Title is required.' })
+      return
+    }
+    setCreateErrors({})
     const newTask: Task = {
       id: Math.max(0, ...tasks.map(t => t.id)) + 1,
       title: form.title.trim(),
@@ -591,8 +597,23 @@ function App() {
 
               <form onSubmit={handleCreate} className="space-y-4 card">
                 <div>
-                  <label className="block text-sm mb-1">Title *</label>
-                  <input value={form.title} onChange={e => setForm({...form, title: e.target.value})} className="w-full border border-[var(--fgm-border)] rounded px-3 py-2" required />
+                  <label htmlFor="create-title" className="block text-sm mb-1">Title *</label>
+                  <input
+                    id="create-title"
+                    value={form.title}
+                    onChange={e => {
+                      setForm({ ...form, title: e.target.value })
+                      if (createErrors.title) setCreateErrors({})
+                    }}
+                    aria-invalid={!!createErrors.title}
+                    aria-describedby={createErrors.title ? 'create-title-error' : undefined}
+                    className={`w-full border rounded px-3 py-2 ${createErrors.title ? 'border-[var(--fgm-danger)]' : 'border-[var(--fgm-border)]'}`}
+                  />
+                  {createErrors.title && (
+                    <p id="create-title-error" role="alert" className="text-xs text-[var(--fgm-danger)] mt-1">
+                      {createErrors.title}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm mb-1">Description</label>
