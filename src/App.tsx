@@ -562,8 +562,18 @@ function App() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm mb-1">Due Date</label>
-                    <input type="date" value={form.dueDate} onChange={e => setForm({...form, dueDate: e.target.value})} className="w-full border border-[var(--fgm-border)] rounded px-3 py-2" />
+                    <label htmlFor="create-due-date" className="block text-sm mb-1">Due date</label>
+                    <input
+                      id="create-due-date"
+                      type="date"
+                      value={form.dueDate}
+                      onChange={e => setForm({ ...form, dueDate: e.target.value })}
+                      aria-describedby="create-due-date-hint"
+                      className="w-full border border-[var(--fgm-border)] rounded px-3 py-2"
+                    />
+                    <p id="create-due-date-hint" className="text-xs text-[var(--fgm-text-secondary)] mt-1">
+                      Optional. Click to pick a date — the empty placeholder is year-month-day, not an error.
+                    </p>
                   </div>
                 </div>
                 <div>
@@ -612,8 +622,18 @@ function App() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm mb-1">Due Date</label>
-                    <input type="date" value={form.dueDate} onChange={e => setForm({...form, dueDate: e.target.value})} className="w-full border border-[var(--fgm-border)] rounded px-3 py-2" />
+                    <label htmlFor="detail-due-date" className="block text-sm mb-1">Due date</label>
+                    <input
+                      id="detail-due-date"
+                      type="date"
+                      value={form.dueDate}
+                      onChange={e => setForm({ ...form, dueDate: e.target.value })}
+                      aria-describedby="detail-due-date-hint"
+                      className="w-full border border-[var(--fgm-border)] rounded px-3 py-2"
+                    />
+                    <p id="detail-due-date-hint" className="text-xs text-[var(--fgm-text-secondary)] mt-1">
+                      Optional. Click to pick a date — the empty placeholder is year-month-day, not an error.
+                    </p>
                   </div>
                 </div>
                 <div>
