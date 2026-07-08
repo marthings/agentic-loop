@@ -43,6 +43,7 @@ https://github.com/users/marthings/projects/1
 - **Backlog (GitHub Project):** https://github.com/users/marthings/projects/1
 - **Mapping:** [`docs/MAPPING.md`](docs/MAPPING.md)
 - **Workflow:** [`docs/WORKFLOW.md`](docs/WORKFLOW.md)
+- **Compact loop checklist** (start here to run or understand the loop): [`docs/LOOP-CHECKLIST.md`](docs/LOOP-CHECKLIST.md)
 - Deployed preview: *(TBD — see backlog)*
 
 The workflow document also defines the Git policy: one issue per short-lived branch, squash-only

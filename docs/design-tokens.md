@@ -18,6 +18,9 @@ The long-term intention is bidirectional sync with Figma Variables.
 --fgm-success
 --fgm-warning
 --fgm-danger
+--fgm-success-bg / --fgm-success-text
+--fgm-warning-bg / --fgm-warning-text
+--fgm-info-bg / --fgm-info-text   (for In Progress)
 
 --fgm-radius-sm  (6px)
 --fgm-radius-md  (10px)
@@ -55,7 +58,7 @@ edits there flow back to code. The sync is idempotent (matched by name). Driven 
 | `--fgm-space-4` | `Spacing / 4` |
 | `--fgm-radius-md` | `Radius / md` |
 
-Collections in Figma: **Color** (11 vars, Light/Dark modes), **Spacing** (6), **Radius** (3).
+Collections in Figma: **Color** (17 vars, Light/Dark modes), **Spacing** (6), **Radius** (3).
 The `.dark` overrides in `index.css` populate the Dark mode; unthemed colors share the same value
 across modes.
 
