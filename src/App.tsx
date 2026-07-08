@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ArrowDown, ArrowUp, ArrowUpDown, BarChart3, FileText, Home, Layers, Settings } from 'lucide-react'
+import { ArrowDown, ArrowUp, ArrowUpDown, BarChart3, Home, Layers, Settings } from 'lucide-react'
 import { Button } from './components/Button'
 import { Card } from './components/Card'
 import { Dropdown } from './components/Dropdown'
@@ -367,7 +367,6 @@ function App() {
 
   const navItems = [
     { id: 'list', label: 'All Tasks', icon: <Home className="w-4 h-4" /> },
-    { id: 'create', label: 'New Task', icon: <FileText className="w-4 h-4" /> },
     { id: 'history', label: 'History', icon: <BarChart3 className="w-4 h-4" /> },
     { id: 'settings', label: 'Settings', icon: <Settings className="w-4 h-4" /> },
   ]
@@ -391,8 +390,7 @@ function App() {
             <button
               key={item.id}
               onClick={() => {
-                if (item.id === 'create') goToCreate()
-                else if (item.id === 'settings') goToSettings()
+                if (item.id === 'settings') goToSettings()
                 else if (item.id === 'history') goToHistory()
                 else goToList()
               }}
