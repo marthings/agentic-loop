@@ -380,11 +380,6 @@ function App() {
             Spec from <a href="https://www.figma.com/board/Qyo8JqnW7hQ4neaBAzG9K9" target="_blank" className="underline">FigJam sitemap</a>
           </div>
         </nav>
-
-        <div className="mt-auto px-2 text-xs">
-          <div className="font-medium mb-1">Quick Stats</div>
-          <div>Total: {stats.total} • Todo: {stats.todo}</div>
-        </div>
       </aside>
 
       {/* Main */}
