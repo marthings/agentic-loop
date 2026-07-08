@@ -52,4 +52,4 @@ Organization/Enterprise plan with a Dev or Full seat (this file is on a Pro team
 files are already in the right format; nothing to rewrite. They're excluded from the app build via
 `tsconfig.app.json`.
 
-_Last updated: 2026-07-07_ (unified status selects to Dropdown in forms, #45)
+_Last updated: 2026-07-08_ (removed sidebar Quick Stats — stats remain on list view only, #47; re-capture frames pending)_
