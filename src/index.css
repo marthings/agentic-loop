@@ -15,6 +15,14 @@
   --fgm-success: #10b981;
   --fgm-warning: #f59e0b;
   --fgm-danger: #ef4444;
+
+  /* Status badge tokens (so captures bind to variables in Figma) */
+  --fgm-success-bg: #d0fae5;
+  --fgm-success-text: #007a55;
+  --fgm-warning-bg: #fef3c6;
+  --fgm-warning-text: #854d0e;
+  --fgm-info-bg: #dbeafe;
+  --fgm-info-text: #1e40af;
   --fgm-radius-sm: 6px;
   --fgm-radius-md: 10px;
   --fgm-radius-lg: 16px;
@@ -51,6 +59,14 @@
   --fgm-text: #f4f2f8;
   --fgm-text-secondary: #a9a4b0;
   --fgm-border: #2f2c37;
+
+  /* Status badge tokens (dark) */
+  --fgm-success-bg: #052e16;
+  --fgm-success-text: #4ade80;
+  --fgm-warning-bg: #451a03;
+  --fgm-warning-text: #fcd34d;
+  --fgm-info-bg: #1e3a8a;
+  --fgm-info-text: #93c5fd;
 }
 
 body {

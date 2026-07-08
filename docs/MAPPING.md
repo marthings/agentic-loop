@@ -16,16 +16,17 @@ Process is in [`WORKFLOW.md`](./WORKFLOW.md): **add page to FigJam → write cod
 | Page | Dev URL | Code | Figma frame |
 |------|---------|------|-------------|
 | Home / Task List | `/` | `src/App.tsx` — `currentView === 'list'` (incl. multi-select bulk delete, due-date sort #4, label filter #5) | [node 150:20](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=150-20) |
+| Home / Task List + success banner | `/?view=list&success=1` | `src/App.tsx` — `currentView === 'list'` with success feedback banner visible (from #11; seed for capture) | [node 174:20](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=174-20) |
 | New Task | `/?view=create` | `src/App.tsx` — `currentView === 'create'` (incl. labels input #5, status uses Dropdown #45) | [node 151:20](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=151-20) |
 | Task Detail | `/?view=detail` · `/?share=…` | `src/App.tsx` — `currentView === 'detail'` (incl. Share link, labels input #5, status uses Dropdown #45) | [node 152:20](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=152-20) |
 | Settings | `/?view=settings` | `src/App.tsx` — `currentView === 'settings'` (incl. dark mode toggle, default status uses Dropdown #45) | [node 117:2](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=117-2) |
 | History & Stats | `/?view=history` | `src/App.tsx` — `currentView === 'history'` (status breakdown #30 + due-date insights #31 + activity #33) | [node 118:2](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=118-2) |
 
-All five frames are bound to the variables/text styles **and componentized** — captured
-buttons/badges/the status dropdown (list filter + form fields) are instances of the library components (Button, StatusBadge,
-Dropdown). A re-capture wipes bindings, styles **and** instances — re-run all three passes.
+All frames are bound to the variables/text styles **and componentized** where applicable. 
 
-When a new page is added to the sitemap, add a row here. After re-capturing, the frame node id may change — update the link.
+**Overlays pattern:** For transient layers like success banners, capture the main view + seeded overlay state separately. **Captured frames must contain only the pure design** — no text or extra descriptions inside the frames. Place the banner frame **below** the main one (see 162:20 below 150:20). Only core views use the standard left-to-right layout. All notes go in this file and FigJam. See skill `capture.md`.
+
+When a new page is added to the sitemap, add a row here. After re-capturing, the frame node id may change — **update the link immediately** using the exact node-id from the capture response. Then run verify. Treat this as the final step of any capture work.
 
 ## Components (code ↔ Figma ↔ Code Connect)
 

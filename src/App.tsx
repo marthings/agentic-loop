@@ -89,6 +89,8 @@ function App() {
   // Share: transient "copied" feedback + a notice when opened from a shared link
   const [shareMsg, setShareMsg] = useState('')
   const [openedFromShare, setOpenedFromShare] = useState(!!sharedTask)
+  const [successMsg, setSuccessMsg] = useState('')
+  const [highlightedId, setHighlightedId] = useState<number | null>(null)
   // Settings: theme (light/dark) — toggles the .dark class + persists
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     if (typeof window !== 'undefined') return (localStorage.getItem('fgm-theme') as 'light' | 'dark') || 'light'
@@ -99,6 +101,18 @@ function App() {
     document.documentElement.classList.toggle('dark', theme === 'dark')
     localStorage.setItem('fgm-theme', theme)
   }, [theme])
+
+  // Support seeding success banner for captures (e.g. /?view=list&success=1)
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    if (currentView === 'list') {
+      const params = new URLSearchParams(window.location.search)
+      if (params.get('success')) {
+        setSuccessMsg('Task created successfully!')
+        // no auto-clear for capture/demo state
+      }
+    }
+  }, [currentView])
 
   // Form state for create/edit
   const [form, setForm] = useState(() =>
@@ -200,21 +214,36 @@ function App() {
     setOpenedFromShare(false)
   }
 
-  const goToList = () => {
+  const goToList = (options?: { success?: string; highlight?: number }) => {
     setCurrentView('list')
     setSelectedTask(null)
     setForm({ title: '', description: '', status: 'Todo', dueDate: '', labels: '' })
     setOpenedFromShare(false)
+    if (options?.success) {
+      setSuccessMsg(options.success)
+      if (options.highlight) setHighlightedId(options.highlight)
+      setTimeout(() => {
+        setSuccessMsg('')
+        setHighlightedId(null)
+      }, 2500)
+    } else {
+      setSuccessMsg('')
+      setHighlightedId(null)
+    }
     if (typeof window !== 'undefined') window.history.replaceState({}, '', '/')
   }
 
   const goToCreate = () => {
+    setSuccessMsg('')
+    setHighlightedId(null)
     setForm({ title: '', description: '', status: defaultStatus, dueDate: '', labels: '' })
     setCurrentView('create')
     if (typeof window !== 'undefined') window.history.replaceState({}, '', '/?view=create')
   }
 
   const goToSettings = () => {
+    setSuccessMsg('')
+    setHighlightedId(null)
     setCurrentView('settings')
     setSelectedTask(null)
     setOpenedFromShare(false)
@@ -222,6 +251,8 @@ function App() {
   }
 
   const goToHistory = () => {
+    setSuccessMsg('')
+    setHighlightedId(null)
     setCurrentView('history')
     setSelectedTask(null)
     setOpenedFromShare(false)
@@ -260,7 +291,7 @@ function App() {
       labels: parseLabels(form.labels),
     }
     setTasks([...tasks, newTask])
-    goToList()
+    goToList({ success: 'Task created successfully!', highlight: newTask.id })
   }
 
   const handleUpdate = (e: React.FormEvent) => {
@@ -317,7 +348,7 @@ function App() {
       <aside className="w-full md:w-64 border-b md:border-b-0 md:border-r border-[var(--fgm-border)] bg-[var(--fgm-bg-secondary)] pl-[16px] pr-[17px] py-[16px] flex flex-col">
         <div className="flex items-center gap-3 mb-8 px-2">
           <div className="w-9 h-9 rounded-xl bg-[var(--fgm-accent)] flex items-center justify-center">
-            <Layers className="w-5 h-5 text-white" />
+            <Layers className="w-5 h-5 text-[var(--fgm-accent-foreground)]" />
           </div>
           <div>
             <div className="font-semibold tracking-tight text-xl">MakeJam</div>
@@ -367,16 +398,34 @@ function App() {
                   <h1 className="text-3xl font-semibold tracking-tight">Tasks</h1>
                   <p className="text-[var(--fgm-text-secondary)]">Your tasks, all in one place</p>
                 </div>
-                <Button variant="primary" onClick={goToCreate} className="px-[19px] py-[11px] rounded-[10px]">+ New Task</Button>
+                <Button variant="primary" onClick={() => goToCreate()} className="px-[19px] py-[11px] rounded-[10px]">+ New Task</Button>
               </div>
 
               {/* Stats - match Figma node 7:3 exact paddings/sizes */}
               <div className="flex flex-wrap md:flex-nowrap gap-4 mb-6">
-                <div className="bg-white border border-[var(--fgm-border)] rounded-[16px] p-[25px] w-full sm:w-[289.5px] flex-shrink-0"><div className="text-[14px] text-[var(--fgm-text-secondary)]">Total</div><div className="text-[24px] leading-[32px] font-semibold tracking-[0.07px]">{stats.total}</div></div>
-                <div className="bg-white border border-[var(--fgm-border)] rounded-[16px] p-[25px] w-full sm:w-[289.5px] flex-shrink-0"><div className="text-[14px] text-[var(--fgm-text-secondary)]">Todo</div><div className="text-[24px] leading-[32px] font-semibold tracking-[0.07px]">{stats.todo}</div></div>
-                <div className="bg-white border border-[var(--fgm-border)] rounded-[16px] p-[25px] w-full sm:w-[289.5px] flex-shrink-0"><div className="text-[14px] text-[var(--fgm-text-secondary)]">In Progress</div><div className="text-[24px] leading-[32px] font-semibold tracking-[0.07px]">{stats.inProgress}</div></div>
-                <div className="bg-white border border-[var(--fgm-border)] rounded-[16px] p-[25px] w-full sm:w-[289.5px] flex-shrink-0"><div className="text-[14px] text-[var(--fgm-text-secondary)]">Done</div><div className="text-[24px] leading-[32px] font-semibold tracking-[0.07px]">{stats.done}</div></div>
+                <div className="bg-[var(--fgm-bg)] border border-[var(--fgm-border)] rounded-[var(--fgm-radius-lg)] p-[var(--fgm-space-6)] w-full sm:w-[289.5px] flex-shrink-0">
+                  <div className="text-[var(--fgm-text-label-size)] text-[var(--fgm-text-secondary)]">Total</div>
+                  <div className="text-[var(--fgm-text-title-size)] leading-[var(--fgm-text-title-line)] font-semibold tracking-[0.07px]">{stats.total}</div>
+                </div>
+                <div className="bg-[var(--fgm-bg)] border border-[var(--fgm-border)] rounded-[var(--fgm-radius-lg)] p-[var(--fgm-space-6)] w-full sm:w-[289.5px] flex-shrink-0">
+                  <div className="text-[var(--fgm-text-label-size)] text-[var(--fgm-text-secondary)]">Todo</div>
+                  <div className="text-[var(--fgm-text-title-size)] leading-[var(--fgm-text-title-line)] font-semibold tracking-[0.07px]">{stats.todo}</div>
+                </div>
+                <div className="bg-[var(--fgm-bg)] border border-[var(--fgm-border)] rounded-[var(--fgm-radius-lg)] p-[var(--fgm-space-6)] w-full sm:w-[289.5px] flex-shrink-0">
+                  <div className="text-[var(--fgm-text-label-size)] text-[var(--fgm-text-secondary)]">In Progress</div>
+                  <div className="text-[var(--fgm-text-title-size)] leading-[var(--fgm-text-title-line)] font-semibold tracking-[0.07px]">{stats.inProgress}</div>
+                </div>
+                <div className="bg-[var(--fgm-bg)] border border-[var(--fgm-border)] rounded-[var(--fgm-radius-lg)] p-[var(--fgm-space-6)] w-full sm:w-[289.5px] flex-shrink-0">
+                  <div className="text-[var(--fgm-text-label-size)] text-[var(--fgm-text-secondary)]">Done</div>
+                  <div className="text-[var(--fgm-text-title-size)] leading-[var(--fgm-text-title-line)] font-semibold tracking-[0.07px]">{stats.done}</div>
+                </div>
               </div>
+
+              {successMsg && (
+                <div className="mb-4 p-3 rounded-[10px] bg-[var(--fgm-accent-light)] text-[var(--fgm-accent)] text-sm">
+                  {successMsg}
+                </div>
+              )}
 
               {/* Filters - pt after stats to match design */}
               <div className="flex flex-col sm:flex-row gap-4 mb-4 pt-1">
@@ -454,7 +503,7 @@ function App() {
                   <tbody>
                     {sortedTasks.length === 0 && <tr><td colSpan={5} className="p-4 text-center text-[var(--fgm-text-secondary)]">No tasks found.</td></tr>}
                     {sortedTasks.map(task => (
-                      <tr key={task.id} onClick={() => openDetail(task)} className="border-b border-[var(--fgm-border)] last:border-0 hover:bg-[var(--fgm-bg-secondary)] cursor-pointer">
+                      <tr key={task.id} onClick={() => openDetail(task)} className={`border-b border-[var(--fgm-border)] last:border-0 hover:bg-[var(--fgm-bg-secondary)] cursor-pointer ${highlightedId === task.id ? 'bg-[var(--fgm-accent-light)]' : ''}`}>
                         <td className="p-3" onClick={e => e.stopPropagation()}>
                           <input
                             type="checkbox"
@@ -511,7 +560,7 @@ function App() {
                     <label className="block text-sm mb-1">Status</label>
                     <Dropdown
                       value={form.status}
-                      onChange={v => setForm({ ...form, status: v })}
+                      onChange={v => setForm({ ...form, status: v as TaskStatus })}
                       ariaLabel="Status"
                       className="w-full"
                       options={statusOptions}
@@ -527,7 +576,7 @@ function App() {
                   <input value={form.labels} onChange={e => setForm({...form, labels: e.target.value})} placeholder="design, frontend" className="w-full border border-[var(--fgm-border)] rounded px-3 py-2" />
                 </div>
                 <div className="flex gap-3 pt-2">
-                  <Button type="button" variant="secondary" onClick={goToList} className="flex-1">Cancel</Button>
+                  <Button type="button" variant="secondary" onClick={() => goToList()} className="flex-1">Cancel</Button>
                   <Button type="submit" variant="primary" className="flex-1">Create Task</Button>
                 </div>
               </form>
@@ -537,7 +586,7 @@ function App() {
           {/* DETAIL VIEW */}
           {currentView === 'detail' && selectedTask && (
             <div className="max-w-2xl">
-              <button onClick={goToList} className="text-sm mb-4 flex items-center gap-1 hover:underline">← Back to list</button>
+              <button onClick={() => goToList()} className="text-sm mb-4 flex items-center gap-1 hover:underline">← Back to list</button>
 
               {openedFromShare && (
                 <div className="mb-4 text-sm rounded-[10px] border border-[var(--fgm-border)] bg-[var(--fgm-accent-light)] text-[var(--fgm-accent)] px-3 py-2">
@@ -561,7 +610,7 @@ function App() {
                     <label className="block text-sm mb-1">Status</label>
                     <Dropdown
                       value={form.status}
-                      onChange={v => setForm({ ...form, status: v })}
+                      onChange={v => setForm({ ...form, status: v as TaskStatus })}
                       ariaLabel="Status"
                       className="w-full"
                       options={statusOptions}
@@ -577,7 +626,7 @@ function App() {
                   <input value={form.labels} onChange={e => setForm({...form, labels: e.target.value})} placeholder="design, frontend" className="w-full border border-[var(--fgm-border)] rounded px-3 py-2" />
                 </div>
                 <div className="flex flex-wrap gap-3 pt-2 items-center">
-                  <Button type="button" variant="secondary" onClick={handleDelete}>Delete</Button>
+                  <Button type="button" variant="secondary" onClick={() => handleDelete()}>Delete</Button>
                   <Button type="button" variant="secondary" onClick={shareTask}>Share</Button>
                   <Button type="submit" variant="primary" className="flex-1">Save Changes</Button>
                 </div>
