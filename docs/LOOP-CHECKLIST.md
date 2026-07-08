@@ -50,6 +50,9 @@ Plan in FigJam   →   Build in Code   →   Capture to Figma   →   adjust in 
 - Commit: short, imperative, references the issue (`Unify selects to Dropdown (closes #45)`).
 - Push + `gh pr create ... --body "Closes #N"`.
 - Human merges (squash only). Branch is deleted.
+- **Capture deferred?** At merge time, file a follow-up `design` issue: `Re-capture frames after … (#N)`,
+  `Depends on #N`, checklist of frames from `MAPPING.md`. See `WORKFLOW.md` → *Code merged without capture*.
+  Example: #49 follows #47.
 
 ## Must-Do Habits at the Seams
 
@@ -70,6 +73,8 @@ Plan in FigJam   →   Build in Code   →   Capture to Figma   →   adjust in 
 
 ## Common Gotchas
 
+- **Code merged without capture** → file a `design` follow-up issue at merge (batched frame checklist).
+  Don't rely on PR comments or `MAPPING.md` notes alone.
 - Capture is always a **cold** URL → deep-linkable state is required.
 - Re-capture **wipes** bindings, styles, and component instances → re-run the full seam.
 - Node IDs change on re-capture → update MAPPING immediately.
