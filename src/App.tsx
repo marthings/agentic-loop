@@ -84,6 +84,7 @@ function App() {
   const [statusFilter, setStatusFilter] = useState<'All' | Task['status']>('All')
   // List: ids of tasks selected for bulk actions
   const [selectedIds, setSelectedIds] = useState<number[]>([])
+  const [bulkDeleteConfirm, setBulkDeleteConfirm] = useState(false)
   // Settings: default status applied to newly created tasks
   const [defaultStatus, setDefaultStatus] = useState<Task['status']>('Todo')
   // Share: transient "copied" feedback + a notice when opened from a shared link
@@ -113,6 +114,10 @@ function App() {
       }
     }
   }, [currentView])
+
+  useEffect(() => {
+    if (selectedIds.length === 0) setBulkDeleteConfirm(false)
+  }, [selectedIds])
 
   // Form state for create/edit
   const [form, setForm] = useState(() =>
@@ -328,11 +333,21 @@ function App() {
     const allSelected = filteredTasks.length > 0 && filteredTasks.every(t => selectedIds.includes(t.id))
     setSelectedIds(allSelected ? [] : filteredTasks.map(t => t.id))
   }
-  const deleteSelected = () => {
+  const requestBulkDelete = () => {
     if (selectedIds.length === 0) return
-    if (!confirm(`Delete ${selectedIds.length} task(s)?`)) return
+    setBulkDeleteConfirm(true)
+  }
+
+  const cancelBulkDelete = () => setBulkDeleteConfirm(false)
+
+  const confirmBulkDelete = () => {
+    const count = selectedIds.length
+    if (count === 0) return
     setTasks(tasks.filter(t => !selectedIds.includes(t.id)))
     setSelectedIds([])
+    setBulkDeleteConfirm(false)
+    setSuccessMsg(`Deleted ${count} task${count === 1 ? '' : 's'}.`)
+    setTimeout(() => setSuccessMsg(''), 2500)
   }
 
   const navItems = [
@@ -456,12 +471,45 @@ function App() {
                 {labelFilter && (
                   <Tag label={`${labelFilter} ✕`} selected onClick={() => setLabelFilter(null)} />
                 )}
-                {selectedIds.length > 0 && (
-                  <Button variant="secondary" onClick={deleteSelected} className="border border-[var(--fgm-border)]">
-                    Delete selected ({selectedIds.length})
+                {selectedIds.length > 0 && !bulkDeleteConfirm && (
+                  <Button
+                    variant="secondary"
+                    onClick={requestBulkDelete}
+                    className="border border-[var(--fgm-danger)] text-[var(--fgm-danger)]"
+                    aria-haspopup="dialog"
+                  >
+                    Delete selected ({selectedIds.length})…
                   </Button>
                 )}
               </div>
+
+              {bulkDeleteConfirm && (
+                <Card
+                  role="alertdialog"
+                  aria-labelledby="bulk-delete-title"
+                  aria-describedby="bulk-delete-desc"
+                  className="mb-4 border-[var(--fgm-danger)]"
+                >
+                  <h2 id="bulk-delete-title" className="text-heading mb-1">Delete selected tasks?</h2>
+                  <p id="bulk-delete-desc" className="text-body text-[var(--fgm-text-secondary)] mb-4">
+                    You are about to permanently delete {selectedIds.length} task{selectedIds.length === 1 ? '' : 's'}.
+                    This cannot be undone.
+                  </p>
+                  <div className="flex flex-wrap gap-3">
+                    <Button type="button" variant="secondary" onClick={cancelBulkDelete}>
+                      Cancel
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      onClick={confirmBulkDelete}
+                      className="border border-[var(--fgm-danger)] bg-[var(--fgm-danger)] text-white hover:opacity-90"
+                    >
+                      Delete {selectedIds.length} task{selectedIds.length === 1 ? '' : 's'}
+                    </Button>
+                  </div>
+                </Card>
+              )}
 
               {/* Table - matches Figma card p-25 rounded-16 */}
               <Card className="overflow-hidden">
