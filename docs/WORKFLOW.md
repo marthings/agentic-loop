@@ -58,6 +58,29 @@ Keep `main` linear and let each merged pull request represent one finished backl
    - Use "Depends on #N" or "Follows #N" in the issue/PR.
    - For layout changes that force many re-captures, group the work so the seam runs once.
 
+## Code merged without capture
+
+Sometimes the code PR lands before Figma is updated — e.g. a focused code change ships first, or
+capture is deferred because it touches many frames. That leaves an intentional gap: **code is
+canonical for behavior; Figma frames are stale until re-captured.**
+
+**Preferred:** capture in the same branch before merge (one PR closes the full loop).
+
+**When capture is deferred**, file a follow-up GitHub issue **at merge time** (don't leave it as a
+PR comment or a note in `MAPPING.md` alone):
+
+1. **Title:** `Re-capture frames after <summary> (#N)` — where `#N` is the merged code issue.
+2. **Label:** `design`
+3. **Link:** `Depends on #N` in the issue body.
+4. **Scope:** one issue per batched capture pass — list every affected frame from `MAPPING.md`
+   (shared chrome like sidebar/header usually means *all* page frames).
+5. **Checklist:** dev URL, current Figma node id, and acceptance (seams run, `MAPPING.md` updated,
+   verify passes).
+
+Example: [#49](https://github.com/marthings/agentic-loop/issues/49) follows
+[#47](https://github.com/marthings/agentic-loop/issues/47) (sidebar Quick Stats removed in code;
+six frames + success banner pending re-capture).
+
 Recommended GitHub repository settings under **Settings → General → Pull Requests**:
 
 - Enable **Allow squash merging**.
