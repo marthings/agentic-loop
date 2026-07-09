@@ -1,38 +1,43 @@
-// Re-capture seam, step 4 (after componentize): replace captured sidebar with Sidebar instance.
+// Re-capture seam, step 4 (after componentize): replace captured sidebar with Sidebar instance
+// and set each SidebarNavItem child State (Default | Active).
 //
 // HOW TO FILL:
 // - FRAME_ID: page frame after seam-swap + bind + componentize
-// - SIDEBAR_SET_ID: from docs/MAPPING.md components table (Sidebar)
-// - ACTIVE_ITEM: Figma variant name — 'All Tasks' | 'Labels' | 'History' | 'Settings'
+// - SIDEBAR_ID: Sidebar component from docs/MAPPING.md (composed, not a variant set)
+// - ACTIVE_LABEL: 'All Tasks' | 'Labels' | 'History' | 'Settings' | null (all Default)
 //
 // Finds the first child named 'Sidebar' or 256px-wide left column under the App root frame.
 
 const FRAME_ID = 'FRAME_ID_HERE';
-const SIDEBAR_SET_ID = '229:240';
-const ACTIVE_ITEM = 'All Tasks';
+const SIDEBAR_ID = '251:472';
+const ACTIVE_LABEL = 'All Tasks';
 
-const VIEW_TO_ACTIVE = {
+const VIEW_TO_ACTIVE_LABEL = {
   list: 'All Tasks',
   labels: 'Labels',
   history: 'History',
   settings: 'Settings',
-  create: 'All Tasks',
-  detail: 'All Tasks',
+  create: null,
+  detail: null,
 };
 
 const frame = await figma.getNodeByIdAsync(FRAME_ID);
 const appRoot = frame.children.find(c => c.type === 'FRAME' && c.width >= 1400) || frame.children[0];
 if (!appRoot) return { error: 'no app root' };
 
-let sidebarNode = appRoot.children.find(c => c.name === 'Sidebar' || (c.type === 'FRAME' && c.width >= 250 && c.width <= 270));
-if (!sidebarNode) return { error: 'sidebar not found', appChildren: appRoot.children.map(c => ({ name: c.name, w: c.width })) };
+let sidebarNode = appRoot.children.find(
+  c => c.name === 'Sidebar' || (c.type === 'FRAME' && c.width >= 250 && c.width <= 270),
+);
+if (!sidebarNode) {
+  return { error: 'sidebar not found', appChildren: appRoot.children.map(c => ({ name: c.name, w: c.width })) };
+}
 
-const sidebarSet = await figma.getNodeByIdAsync(SIDEBAR_SET_ID);
-const variantName = 'Active item=' + ACTIVE_ITEM;
-const variant = sidebarSet.children.find(c => c.name === variantName);
-if (!variant) return { error: 'variant not found', variantName };
+const sidebarComp = await figma.getNodeByIdAsync(SIDEBAR_ID);
+if (!sidebarComp || sidebarComp.type !== 'COMPONENT') {
+  return { error: 'Sidebar component not found', SIDEBAR_ID };
+}
 
-const inst = variant.createInstance();
+const inst = sidebarComp.createInstance();
 const parent = sidebarNode.parent;
 const idx = parent.children.indexOf(sidebarNode);
 parent.insertChild(idx, inst);
@@ -40,4 +45,16 @@ inst.x = sidebarNode.x;
 inst.y = sidebarNode.y;
 sidebarNode.remove();
 
-return { frame: frame.name, instanceId: inst.id, active: ACTIVE_ITEM };
+const nav = inst.findOne(n => n.name === 'Navigation');
+const updated = [];
+if (nav) {
+  for (const child of nav.children) {
+    if (child.type !== 'INSTANCE' || !child.name.startsWith('NavItem/')) continue;
+    const label = child.name.replace('NavItem/', '');
+    const state = ACTIVE_LABEL && label === ACTIVE_LABEL ? 'Active' : 'Default';
+    child.setProperties({ State: state });
+    updated.push({ label, state });
+  }
+}
+
+return { frame: frame.name, instanceId: inst.id, activeLabel: ACTIVE_LABEL, updated };

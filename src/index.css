@@ -224,3 +224,76 @@ button.tag {
   padding: var(--fgm-space-6);
   box-shadow: 0 24px 48px -12px rgb(0 0 0 / 0.25);
 }
+
+.sidebar {
+  width: 100%;
+  border-bottom: 1px solid var(--fgm-border);
+  background-color: var(--fgm-bg-secondary);
+  padding: 16px 17px 16px 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .sidebar {
+    width: 16rem;
+    border-bottom: none;
+    border-right: 1px solid var(--fgm-border);
+  }
+}
+
+.sidebar__brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 32px;
+  padding: 0 8px;
+}
+
+.sidebar__logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background-color: var(--fgm-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 32px;
+}
+
+.sidebar-nav-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  font-size: 14px;
+  line-height: 22px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 0.1s ease, color 0.1s ease;
+  text-align: left;
+}
+
+.sidebar-nav-item--default {
+  color: var(--fgm-text-secondary);
+  font-weight: 400;
+}
+
+.sidebar-nav-item--default:hover {
+  background-color: var(--fgm-border);
+}
+
+.sidebar-nav-item--active {
+  background-color: var(--fgm-accent-light);
+  color: var(--fgm-accent);
+  font-weight: 500;
+}
