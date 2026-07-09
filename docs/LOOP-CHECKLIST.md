@@ -41,6 +41,7 @@ Plan in FigJam   →   Build in Code   →   Capture to Figma   →   adjust in 
   1. `seam-swap.js` (delete stale, rename/position new, strip overlays)
   2. `bind-and-style.js`
   3. `componentize.js` (update CONFIG for composites if needed)
+  4. `docs/scripts/sidebar-swap.js` (replace captured sidebar with Sidebar instance + correct `Active item`)
 - **Immediately** update `docs/MAPPING.md` with the new node IDs from the capture response.
 - **Run verify**.
 
