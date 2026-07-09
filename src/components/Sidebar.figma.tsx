@@ -1,21 +1,12 @@
 import figma from '@figma/code-connect'
-import { Sidebar, type SidebarItem } from './Sidebar'
+import { Sidebar } from './Sidebar'
 
-// Figma: Sidebar (active nav variant set) — node 229:240 in the design file
+// Figma: Sidebar (composed SidebarNavItem instances) — node 251:472
+// activeItem is code-only: Figma sets per-item State on child instances (see sidebar-swap.js).
 figma.connect(
   Sidebar,
-  'https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=229-240',
+  'https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=251-472',
   {
-    props: {
-      activeItem: figma.enum('Active item', {
-        'All Tasks': 'list',
-        Labels: 'labels',
-        History: 'history',
-        Settings: 'settings',
-      }),
-    },
-    example: ({ activeItem }) => (
-      <Sidebar activeItem={activeItem as SidebarItem} onNavigate={() => {}} />
-    ),
+    example: () => <Sidebar activeItem="list" onNavigate={() => {}} />,
   },
 )

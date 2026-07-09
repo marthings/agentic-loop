@@ -15,13 +15,13 @@ Process is in [`WORKFLOW.md`](./WORKFLOW.md): **add page to FigJam → write cod
 
 | Page | Dev URL | Code | Figma frame |
 |------|---------|------|-------------|
-| Home / Task List | `/` | `src/App.tsx` — `currentView === 'list'` (incl. multi-select bulk delete w/ in-app confirm #13, due-date sort #4, label filter #5; Sidebar instance, active All Tasks) | [node 242:355](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=242-355) |
-| Home / Task List + success banner | `/?view=list&success=1` | `src/App.tsx` — list after create modal submit; success feedback banner visible (#11; seed for capture) | [node 243:355](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=243-355) |
-| Home / Task List + bulk delete confirm | `/?view=list&bulkDelete=1` | `src/App.tsx` — `currentView === 'list'` with all tasks selected + bulk-delete `alertdialog` open (#13; seed for capture) | [node 244:355](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=244-355) |
-| Home / Task List + create modal | `/?create=1` (legacy `/?view=create`) | `src/App.tsx` — list view with centered `<dialog>` open (`openCreateModal`; labels #5, Dropdown #45, due-date hint #9, inline validation #10) | [node 245:355](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=245-355) |
-| Task Detail | `/?view=detail` · `/?share=…` | `src/App.tsx` — `currentView === 'detail'` (Share link, labels #5, Dropdown #45, due-date hint #9) | [node 246:355](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=246-355) |
-| Settings | `/?view=settings` | `src/App.tsx` — `currentView === 'settings'` (incl. dark mode toggle, default status uses Dropdown #45) | [node 247:355](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=247-355) |
-| History & Stats | `/?view=history` | `src/App.tsx` — `currentView === 'history'` (status breakdown #30 + due-date insights #31 + activity #33) | [node 248:355](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=248-355) |
+| Home / Task List | `/` | `src/App.tsx` — `currentView === 'list'` (incl. multi-select bulk delete w/ in-app confirm #13, due-date sort #4, label filter #5; Sidebar instance, active All Tasks) | [node 252:368](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=252-368) |
+| Home / Task List + success banner | `/?view=list&success=1` | `src/App.tsx` — list after create modal submit; success feedback banner visible (#11; seed for capture) | [node 253:368](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=253-368) |
+| Home / Task List + bulk delete confirm | `/?view=list&bulkDelete=1` | `src/App.tsx` — `currentView === 'list'` with all tasks selected + bulk-delete `alertdialog` open (#13; seed for capture) | [node 254:368](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=254-368) |
+| Home / Task List + create modal | `/?create=1` (legacy `/?view=create`) | `src/App.tsx` — list view with centered `<dialog>` open (`openCreateModal`; labels #5, Dropdown #45, due-date hint #9, inline validation #10) | [node 255:368](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=255-368) |
+| Task Detail | `/?view=detail` · `/?share=…` | `src/App.tsx` — `currentView === 'detail'` (Share link, labels #5, Dropdown #45, due-date hint #9) | [node 256:368](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=256-368) |
+| Settings | `/?view=settings` | `src/App.tsx` — `currentView === 'settings'` (incl. dark mode toggle, default status uses Dropdown #45) | [node 257:368](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=257-368) |
+| History & Stats | `/?view=history` | `src/App.tsx` — `currentView === 'history'` (status breakdown #30 + due-date insights #31 + activity #33) | [node 258:368](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=258-368) |
 | Labels | `/?view=labels` | `src/App.tsx` — `currentView === 'labels'` (label overview + click chip → `/?view=list&label={name}`; #61) | [node 227:68](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=227-68) |
 
 All frames are bound to the variables/text styles **and componentized** where applicable.
@@ -43,7 +43,8 @@ Reusable components live in `src/components/`, are built as real Figma component
 | StatusBadge | `src/components/StatusBadge.tsx` | [23:10](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=23-10) (Todo/In Progress/Done) | `StatusBadge.figma.tsx` |
 | Dropdown | `src/components/Dropdown.tsx` | [106:20](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=106-20) (Closed/Open, TEXT prop `Label`) | `Dropdown.figma.tsx` |
 | Tag | `src/components/Tag.tsx` | [147:24](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=147-24) (Default/Selected, TEXT prop `Label`) | `Tag.figma.tsx` |
-| Sidebar | `src/components/Sidebar.tsx` | [229:240](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=229-240) (Active item=All Tasks/Labels/History/Settings) | `Sidebar.figma.tsx` |
+| SidebarNavItem | `src/components/SidebarNavItem.tsx` | [251:399](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=251-399) (State=Default/Active/Hover, TEXT `Label`) | `SidebarNavItem.figma.tsx` |
+| Sidebar | `src/components/Sidebar.tsx` | [251:472](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=251-472) (composes 4× SidebarNavItem; per-item State set in seam) | `Sidebar.figma.tsx` |
 
 **This table + the `.figma.tsx` files are our canonical mapping** — they don't depend on Code Connect
 being enabled. The `.figma.tsx` files are precise and machine-readable even unpublished (component →
@@ -57,4 +58,4 @@ Organization/Enterprise plan with a Dev or Full seat (this file is on a Pro team
 files are already in the right format; nothing to rewrite. They're excluded from the app build via
 `tsconfig.app.json`.
 
-_Last updated: 2026-07-09_ (Re-captured after create-task modal #69/#67; create modal overlay at y=913; main row shifted left without full-page New Task.)_
+_Last updated: 2026-07-09_ (Re-captured after SidebarNavItem #71; Sidebar composes 4× SidebarNavItem with per-frame Active state in seam.)_

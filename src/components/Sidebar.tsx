@@ -1,27 +1,27 @@
-import type { ReactNode } from 'react'
 import { BarChart3, Home, Layers, Settings, Tags } from 'lucide-react'
+import { SidebarNavItem } from './SidebarNavItem'
 
 export type SidebarItem = 'list' | 'labels' | 'history' | 'settings'
 
-const navItems: { id: SidebarItem; label: string; icon: ReactNode }[] = [
-  { id: 'list', label: 'All Tasks', icon: <Home className="w-4 h-4" /> },
-  { id: 'labels', label: 'Labels', icon: <Tags className="w-4 h-4" /> },
-  { id: 'history', label: 'History', icon: <BarChart3 className="w-4 h-4" /> },
-  { id: 'settings', label: 'Settings', icon: <Settings className="w-4 h-4" /> },
+const navItems: { id: SidebarItem; label: string; icon: typeof Home }[] = [
+  { id: 'list', label: 'All Tasks', icon: Home },
+  { id: 'labels', label: 'Labels', icon: Tags },
+  { id: 'history', label: 'History', icon: BarChart3 },
+  { id: 'settings', label: 'Settings', icon: Settings },
 ]
 
 interface SidebarProps {
-  /** Nav highlight; null on detail (no sidebar destination). */
+  /** Nav highlight; null on detail / modals (all items default). */
   activeItem: SidebarItem | null
   onNavigate: (item: SidebarItem) => void
 }
 
-/** Sidebar — shared app chrome; spec in FigJam, design in the Figma library (Code Connect). */
+/** Sidebar — shared app chrome; composes SidebarNavItem instances. */
 export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
   return (
-    <aside className="w-full md:w-64 border-b md:border-b-0 md:border-r border-[var(--fgm-border)] bg-[var(--fgm-bg-secondary)] pl-[16px] pr-[17px] py-[16px] flex flex-col">
-      <div className="flex items-center gap-3 mb-8 px-2">
-        <div className="w-9 h-9 rounded-xl bg-[var(--fgm-accent)] flex items-center justify-center">
+    <aside className="sidebar">
+      <div className="sidebar__brand">
+        <div className="sidebar__logo">
           <Layers className="w-5 h-5 text-[var(--fgm-accent-foreground)]" />
         </div>
         <div>
@@ -30,22 +30,19 @@ export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
         </div>
       </div>
 
-      <nav className="space-y-1 mb-8">
-        {navItems.map((item) => (
-          <button
-            key={item.id}
-            type="button"
-            onClick={() => onNavigate(item.id)}
-            className={`w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors ${
-              activeItem !== null && activeItem === item.id
-                ? 'bg-[var(--fgm-accent-light)] text-[var(--fgm-accent)] font-medium'
-                : 'hover:bg-[var(--fgm-border)] text-[var(--fgm-text-secondary)]'
-            }`}
-          >
-            {item.icon}
-            {item.label}
-          </button>
-        ))}
+      <nav className="sidebar__nav">
+        {navItems.map((item) => {
+          const Icon = item.icon
+          return (
+            <SidebarNavItem
+              key={item.id}
+              label={item.label}
+              icon={<Icon className="w-4 h-4" />}
+              state={activeItem !== null && activeItem === item.id ? 'active' : 'default'}
+              onClick={() => onNavigate(item.id)}
+            />
+          )
+        })}
         <div className="pt-4 text-xs text-[var(--fgm-text-secondary)] px-3">
           Spec from{' '}
           <a
