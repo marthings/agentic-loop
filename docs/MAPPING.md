@@ -15,13 +15,13 @@ Process is in [`WORKFLOW.md`](./WORKFLOW.md): **add page to FigJam → write cod
 
 | Page | Dev URL | Code | Figma frame |
 |------|---------|------|-------------|
-| Home / Task List | `/` | `src/App.tsx` — `currentView === 'list'` (incl. multi-select bulk delete w/ in-app confirm #13, due-date sort #4, label filter #5; sidebar: All Tasks / History / Settings only, #8) | [node 216:69](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=216-69) |
-| Home / Task List + success banner | `/?view=list&success=1` | `src/App.tsx` — `currentView === 'list'` with success feedback banner visible (from #11; seed for capture) | [node 217:69](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=217-69) |
-| Home / Task List + bulk delete confirm | `/?view=list&bulkDelete=1` | `src/App.tsx` — `currentView === 'list'` with all tasks selected + bulk-delete `alertdialog` open (#13; seed for capture) | [node 218:69](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=218-69) |
-| New Task | `/?view=create` | `src/App.tsx` — `currentView === 'create'` (labels #5, Dropdown #45, due-date hint #9, inline validation #10) | [node 219:69](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=219-69) |
-| Task Detail | `/?view=detail` · `/?share=…` | `src/App.tsx` — `currentView === 'detail'` (Share link, labels #5, Dropdown #45, due-date hint #9) | [node 220:69](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=220-69) |
-| Settings | `/?view=settings` | `src/App.tsx` — `currentView === 'settings'` (incl. dark mode toggle, default status uses Dropdown #45) | [node 221:69](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=221-69) |
-| History & Stats | `/?view=history` | `src/App.tsx` — `currentView === 'history'` (status breakdown #30 + due-date insights #31 + activity #33) | [node 222:69](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=222-69) |
+| Home / Task List | `/` | `src/App.tsx` — `currentView === 'list'` (incl. multi-select bulk delete w/ in-app confirm #13, due-date sort #4, label filter #5; Sidebar instance, active All Tasks) | [node 231:68](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=231-68) |
+| Home / Task List + success banner | `/?view=list&success=1` | `src/App.tsx` — `currentView === 'list'` with success feedback banner visible (from #11; seed for capture) | [node 232:68](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=232-68) |
+| Home / Task List + bulk delete confirm | `/?view=list&bulkDelete=1` | `src/App.tsx` — `currentView === 'list'` with all tasks selected + bulk-delete `alertdialog` open (#13; seed for capture) | [node 233:68](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=233-68) |
+| New Task | `/?view=create` | `src/App.tsx` — `currentView === 'create'` (labels #5, Dropdown #45, due-date hint #9, inline validation #10) | [node 234:68](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=234-68) |
+| Task Detail | `/?view=detail` · `/?share=…` | `src/App.tsx` — `currentView === 'detail'` (Share link, labels #5, Dropdown #45, due-date hint #9) | [node 235:68](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=235-68) |
+| Settings | `/?view=settings` | `src/App.tsx` — `currentView === 'settings'` (incl. dark mode toggle, default status uses Dropdown #45) | [node 236:68](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=236-68) |
+| History & Stats | `/?view=history` | `src/App.tsx` — `currentView === 'history'` (status breakdown #30 + due-date insights #31 + activity #33) | [node 237:68](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=237-68) |
 | Labels | `/?view=labels` | `src/App.tsx` — `currentView === 'labels'` (label overview + click chip → `/?view=list&label={name}`; #61) | [node 227:68](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=227-68) |
 
 All frames are bound to the variables/text styles **and componentized** where applicable.
@@ -57,4 +57,4 @@ Organization/Enterprise plan with a Dev or Full seat (this file is on a Pro team
 files are already in the right format; nothing to rewrite. They're excluded from the app build via
 `tsconfig.app.json`.
 
-_Last updated: 2026-07-09_ (Sidebar component #64; re-capture #63 uses `docs/scripts/sidebar-swap.js` after componentize)_
+_Last updated: 2026-07-09_ (Re-captured 7 frames after Labels sidebar #61 + Sidebar component #64/#65; seam includes `docs/scripts/sidebar-swap.js`)_
