@@ -15,13 +15,13 @@ Process is in [`WORKFLOW.md`](./WORKFLOW.md): **add page to FigJam → write cod
 
 | Page | Dev URL | Code | Figma frame |
 |------|---------|------|-------------|
-| Home / Task List | `/` | `src/App.tsx` — `currentView === 'list'` (incl. multi-select bulk delete w/ in-app confirm #13, due-date sort #4, label filter #5; Sidebar instance, active All Tasks) | [node 231:68](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=231-68) |
-| Home / Task List + success banner | `/?view=list&success=1` | `src/App.tsx` — list after create modal submit; success feedback banner visible (#11; seed for capture) | [node 232:68](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=232-68) |
-| Home / Task List + bulk delete confirm | `/?view=list&bulkDelete=1` | `src/App.tsx` — `currentView === 'list'` with all tasks selected + bulk-delete `alertdialog` open (#13; seed for capture) | [node 233:68](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=233-68) |
-| Home / Task List + create modal | `/?create=1` (legacy `/?view=create`) | `src/App.tsx` — list view with `<dialog>` open (`openCreateModal`; labels #5, Dropdown #45, due-date hint #9, inline validation #10). **Figma stale** — was full-page `234:68`; re-capture pending. | _pending re-capture_ |
-| Task Detail | `/?view=detail` · `/?share=…` | `src/App.tsx` — `currentView === 'detail'` (Share link, labels #5, Dropdown #45, due-date hint #9) | [node 235:68](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=235-68) |
-| Settings | `/?view=settings` | `src/App.tsx` — `currentView === 'settings'` (incl. dark mode toggle, default status uses Dropdown #45) | [node 236:68](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=236-68) |
-| History & Stats | `/?view=history` | `src/App.tsx` — `currentView === 'history'` (status breakdown #30 + due-date insights #31 + activity #33) | [node 237:68](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=237-68) |
+| Home / Task List | `/` | `src/App.tsx` — `currentView === 'list'` (incl. multi-select bulk delete w/ in-app confirm #13, due-date sort #4, label filter #5; Sidebar instance, active All Tasks) | [node 242:355](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=242-355) |
+| Home / Task List + success banner | `/?view=list&success=1` | `src/App.tsx` — list after create modal submit; success feedback banner visible (#11; seed for capture) | [node 243:355](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=243-355) |
+| Home / Task List + bulk delete confirm | `/?view=list&bulkDelete=1` | `src/App.tsx` — `currentView === 'list'` with all tasks selected + bulk-delete `alertdialog` open (#13; seed for capture) | [node 244:355](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=244-355) |
+| Home / Task List + create modal | `/?create=1` (legacy `/?view=create`) | `src/App.tsx` — list view with centered `<dialog>` open (`openCreateModal`; labels #5, Dropdown #45, due-date hint #9, inline validation #10) | [node 245:355](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=245-355) |
+| Task Detail | `/?view=detail` · `/?share=…` | `src/App.tsx` — `currentView === 'detail'` (Share link, labels #5, Dropdown #45, due-date hint #9) | [node 246:355](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=246-355) |
+| Settings | `/?view=settings` | `src/App.tsx` — `currentView === 'settings'` (incl. dark mode toggle, default status uses Dropdown #45) | [node 247:355](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=247-355) |
+| History & Stats | `/?view=history` | `src/App.tsx` — `currentView === 'history'` (status breakdown #30 + due-date insights #31 + activity #33) | [node 248:355](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=248-355) |
 | Labels | `/?view=labels` | `src/App.tsx` — `currentView === 'labels'` (label overview + click chip → `/?view=list&label={name}`; #61) | [node 227:68](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=227-68) |
 
 All frames are bound to the variables/text styles **and componentized** where applicable.
@@ -57,4 +57,4 @@ Organization/Enterprise plan with a Dev or Full seat (this file is on a Pro team
 files are already in the right format; nothing to rewrite. They're excluded from the app build via
 `tsconfig.app.json`.
 
-_Last updated: 2026-07-09_ (Create task moved to `<dialog>` modal on list; success banner unchanged. Re-capture list + create-modal + success frames pending.)_
+_Last updated: 2026-07-09_ (Re-captured after create-task modal #69/#67; create modal overlay at y=913; main row shifted left without full-page New Task.)_
