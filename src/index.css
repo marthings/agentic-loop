@@ -204,8 +204,11 @@ button.tag {
   border: none;
   border-radius: var(--fgm-radius-lg);
   padding: 0;
+  margin: auto;
   max-width: 32rem;
+  max-height: calc(100% - 2rem);
   width: calc(100% - 2rem);
+  overflow: auto;
   background: transparent;
   color: var(--fgm-text);
 }
