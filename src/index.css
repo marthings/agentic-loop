@@ -199,3 +199,28 @@ button.tag {
   background-color: var(--fgm-accent-light);
   color: var(--fgm-accent);
 }
+
+.create-dialog {
+  border: none;
+  border-radius: var(--fgm-radius-lg);
+  padding: 0;
+  margin: auto;
+  max-width: 32rem;
+  max-height: calc(100% - 2rem);
+  width: calc(100% - 2rem);
+  overflow: auto;
+  background: transparent;
+  color: var(--fgm-text);
+}
+
+.create-dialog::backdrop {
+  background: rgb(0 0 0 / 0.45);
+}
+
+.create-dialog-panel {
+  background-color: var(--fgm-bg);
+  border: 1px solid var(--fgm-border);
+  border-radius: var(--fgm-radius-lg);
+  padding: var(--fgm-space-6);
+  box-shadow: 0 24px 48px -12px rgb(0 0 0 / 0.25);
+}

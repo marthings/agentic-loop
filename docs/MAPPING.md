@@ -16,9 +16,9 @@ Process is in [`WORKFLOW.md`](./WORKFLOW.md): **add page to FigJam → write cod
 | Page | Dev URL | Code | Figma frame |
 |------|---------|------|-------------|
 | Home / Task List | `/` | `src/App.tsx` — `currentView === 'list'` (incl. multi-select bulk delete w/ in-app confirm #13, due-date sort #4, label filter #5; Sidebar instance, active All Tasks) | [node 231:68](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=231-68) |
-| Home / Task List + success banner | `/?view=list&success=1` | `src/App.tsx` — `currentView === 'list'` with success feedback banner visible (from #11; seed for capture) | [node 232:68](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=232-68) |
+| Home / Task List + success banner | `/?view=list&success=1` | `src/App.tsx` — list after create modal submit; success feedback banner visible (#11; seed for capture) | [node 232:68](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=232-68) |
 | Home / Task List + bulk delete confirm | `/?view=list&bulkDelete=1` | `src/App.tsx` — `currentView === 'list'` with all tasks selected + bulk-delete `alertdialog` open (#13; seed for capture) | [node 233:68](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=233-68) |
-| New Task | `/?view=create` | `src/App.tsx` — `currentView === 'create'` (labels #5, Dropdown #45, due-date hint #9, inline validation #10) | [node 234:68](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=234-68) |
+| Home / Task List + create modal | `/?create=1` (legacy `/?view=create`) | `src/App.tsx` — list view with `<dialog>` open (`openCreateModal`; labels #5, Dropdown #45, due-date hint #9, inline validation #10). **Figma stale** — was full-page `234:68`; re-capture pending. | _pending re-capture_ |
 | Task Detail | `/?view=detail` · `/?share=…` | `src/App.tsx` — `currentView === 'detail'` (Share link, labels #5, Dropdown #45, due-date hint #9) | [node 235:68](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=235-68) |
 | Settings | `/?view=settings` | `src/App.tsx` — `currentView === 'settings'` (incl. dark mode toggle, default status uses Dropdown #45) | [node 236:68](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=236-68) |
 | History & Stats | `/?view=history` | `src/App.tsx` — `currentView === 'history'` (status breakdown #30 + due-date insights #31 + activity #33) | [node 237:68](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=237-68) |
@@ -57,4 +57,4 @@ Organization/Enterprise plan with a Dev or Full seat (this file is on a Pro team
 files are already in the right format; nothing to rewrite. They're excluded from the app build via
 `tsconfig.app.json`.
 
-_Last updated: 2026-07-09_ (Re-captured 7 frames after Labels sidebar #61 + Sidebar component #64/#65; seam includes `docs/scripts/sidebar-swap.js`)_
+_Last updated: 2026-07-09_ (Create task moved to `<dialog>` modal on list; success banner unchanged. Re-capture list + create-modal + success frames pending.)_

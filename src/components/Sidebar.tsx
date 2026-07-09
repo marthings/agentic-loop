@@ -11,7 +11,7 @@ const navItems: { id: SidebarItem; label: string; icon: ReactNode }[] = [
 ]
 
 interface SidebarProps {
-  /** Nav highlight; null when on create/detail (no sidebar destination). */
+  /** Nav highlight; null on detail (no sidebar destination). */
   activeItem: SidebarItem | null
   onNavigate: (item: SidebarItem) => void
 }
