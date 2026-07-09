@@ -43,6 +43,7 @@ Reusable components live in `src/components/`, are built as real Figma component
 | StatusBadge | `src/components/StatusBadge.tsx` | [23:10](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=23-10) (Todo/In Progress/Done) | `StatusBadge.figma.tsx` |
 | Dropdown | `src/components/Dropdown.tsx` | [106:20](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=106-20) (Closed/Open, TEXT prop `Label`) | `Dropdown.figma.tsx` |
 | Tag | `src/components/Tag.tsx` | [147:24](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=147-24) (Default/Selected, TEXT prop `Label`) | `Tag.figma.tsx` |
+| Sidebar | `src/components/Sidebar.tsx` | [229:240](https://www.figma.com/design/HM0wHv6sz11nOjnifpBXjF?node-id=229-240) (Active item=All Tasks/Labels/History/Settings) | `Sidebar.figma.tsx` |
 
 **This table + the `.figma.tsx` files are our canonical mapping** — they don't depend on Code Connect
 being enabled. The `.figma.tsx` files are precise and machine-readable even unpublished (component →
@@ -56,4 +57,4 @@ Organization/Enterprise plan with a Dev or Full seat (this file is on a Pro team
 files are already in the right format; nothing to rewrite. They're excluded from the app build via
 `tsconfig.app.json`.
 
-_Last updated: 2026-07-09_ (added Labels page + Figma Interaction annotations, closes #61; existing frames still show pre-Labels sidebar — re-capture follow-up pending)_
+_Last updated: 2026-07-09_ (Sidebar component #64; re-capture #63 uses `docs/scripts/sidebar-swap.js` after componentize)_
