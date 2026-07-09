@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react'
 import { Button } from './components/Button'
 import { Card } from './components/Card'
@@ -68,18 +68,24 @@ function App() {
       ? initialTasks[0]
       : null
   const initialSelected = sharedTask ?? initialDetail
-  const [currentView, setCurrentView] = useState<'list' | 'create' | 'detail' | 'settings' | 'history' | 'labels'>(() => {
+  const [currentView, setCurrentView] = useState<'list' | 'detail' | 'settings' | 'history' | 'labels'>(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search)
       if (params.get('share')) return 'detail'
       const v = params.get('view')
-      if (v === 'create') return 'create'
+      if (v === 'create') return 'list' // legacy seed → list + create modal
       if (v === 'detail') return 'detail'
       if (v === 'settings') return 'settings'
       if (v === 'history') return 'history'
       if (v === 'labels') return 'labels'
     }
     return 'list'
+  })
+  const createDialogRef = useRef<HTMLDialogElement>(null)
+  const [createModalOpen, setCreateModalOpen] = useState(() => {
+    if (typeof window === 'undefined') return false
+    const params = new URLSearchParams(window.location.search)
+    return params.get('create') === '1' || params.get('view') === 'create'
   })
   const [selectedTask, setSelectedTask] = useState<Task | null>(initialSelected)
   const [searchTerm, setSearchTerm] = useState('')
@@ -130,6 +136,31 @@ function App() {
   useEffect(() => {
     if (selectedIds.length === 0) setBulkDeleteConfirm(false)
   }, [selectedIds])
+
+  useEffect(() => {
+    const dialog = createDialogRef.current
+    if (!dialog) return
+    if (createModalOpen && !dialog.open) dialog.showModal()
+    else if (!createModalOpen && dialog.open) dialog.close()
+  }, [createModalOpen])
+
+  useEffect(() => {
+    const dialog = createDialogRef.current
+    if (!dialog) return
+    const onClose = () => {
+      setCreateModalOpen(false)
+      setCreateErrors({})
+      if (typeof window === 'undefined') return
+      const params = new URLSearchParams(window.location.search)
+      if (!params.get('create') && params.get('view') !== 'create') return
+      params.delete('create')
+      if (params.get('view') === 'create') params.delete('view')
+      const qs = params.toString()
+      window.history.replaceState({}, '', qs ? `/?${qs}` : '/')
+    }
+    dialog.addEventListener('close', onClose)
+    return () => dialog.removeEventListener('close', onClose)
+  }, [])
 
   // Form state for create/edit
   const [form, setForm] = useState(() =>
@@ -265,13 +296,24 @@ function App() {
     }
   }
 
-  const goToCreate = () => {
+  const openCreateModal = () => {
     setSuccessMsg('')
     setHighlightedId(null)
     setCreateErrors({})
     setForm({ title: '', description: '', status: defaultStatus, dueDate: '', labels: '' })
-    setCurrentView('create')
-    if (typeof window !== 'undefined') window.history.replaceState({}, '', '/?view=create')
+    setCreateModalOpen(true)
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search)
+      params.set('create', '1')
+      if (params.get('view') === 'create') params.delete('view')
+      if (!params.get('view')) params.set('view', 'list')
+      window.history.replaceState({}, '', `/?${params.toString()}`)
+    }
+  }
+
+  const closeCreateModal = () => {
+    setCreateModalOpen(false)
+    createDialogRef.current?.close()
   }
 
   const goToSettings = () => {
@@ -342,7 +384,19 @@ function App() {
       labels: parseLabels(form.labels),
     }
     setTasks([...tasks, newTask])
-    goToList({ success: 'Task created successfully!', highlight: newTask.id })
+    closeCreateModal()
+    setSuccessMsg('Task created successfully!')
+    setHighlightedId(newTask.id)
+    setTimeout(() => {
+      setSuccessMsg('')
+      setHighlightedId(null)
+    }, 2500)
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams()
+      params.set('view', 'list')
+      params.set('success', '1')
+      window.history.replaceState({}, '', `/?${params.toString()}`)
+    }
   }
 
   const handleUpdate = (e: React.FormEvent) => {
@@ -425,7 +479,7 @@ function App() {
                   <h1 className="text-3xl font-semibold tracking-tight">Tasks</h1>
                   <p className="text-[var(--fgm-text-secondary)]">Your tasks, all in one place</p>
                 </div>
-                <Button variant="primary" onClick={() => goToCreate()} className="px-[19px] py-[11px] rounded-[10px]">+ New Task</Button>
+                <Button variant="primary" onClick={openCreateModal} className="px-[19px] py-[11px] rounded-[10px]">+ New Task</Button>
               </div>
 
               {/* Stats - match Figma node 7:3 exact paddings/sizes */}
@@ -598,74 +652,6 @@ function App() {
               </Card>
               <p className="text-xs mt-2 text-[var(--fgm-text-secondary)]">Click any row to open it. Your data lives in this browser session.</p>
             </>
-          )}
-
-          {/* CREATE VIEW */}
-          {currentView === 'create' && (
-            <div className="max-w-lg">
-              <h1 className="text-2xl font-semibold mb-1">New Task</h1>
-              <p className="text-sm text-[var(--fgm-text-secondary)] mb-6">Add a new task.</p>
-
-              <form onSubmit={handleCreate} className="space-y-4 card">
-                <div>
-                  <label htmlFor="create-title" className="block text-sm mb-1">Title *</label>
-                  <input
-                    id="create-title"
-                    value={form.title}
-                    onChange={e => {
-                      setForm({ ...form, title: e.target.value })
-                      if (createErrors.title) setCreateErrors({})
-                    }}
-                    aria-invalid={!!createErrors.title}
-                    aria-describedby={createErrors.title ? 'create-title-error' : undefined}
-                    className={`w-full border rounded px-3 py-2 ${createErrors.title ? 'border-[var(--fgm-danger)]' : 'border-[var(--fgm-border)]'}`}
-                  />
-                  {createErrors.title && (
-                    <p id="create-title-error" role="alert" className="text-xs text-[var(--fgm-danger)] mt-1">
-                      {createErrors.title}
-                    </p>
-                  )}
-                </div>
-                <div>
-                  <label className="block text-sm mb-1">Description</label>
-                  <textarea value={form.description} onChange={e => setForm({...form, description: e.target.value})} className="w-full border border-[var(--fgm-border)] rounded px-3 py-2 h-24" />
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm mb-1">Status</label>
-                    <Dropdown
-                      value={form.status}
-                      onChange={v => setForm({ ...form, status: v as TaskStatus })}
-                      ariaLabel="Status"
-                      className="w-full"
-                      options={statusOptions}
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="create-due-date" className="block text-sm mb-1">Due date</label>
-                    <input
-                      id="create-due-date"
-                      type="date"
-                      value={form.dueDate}
-                      onChange={e => setForm({ ...form, dueDate: e.target.value })}
-                      aria-describedby="create-due-date-hint"
-                      className="w-full border border-[var(--fgm-border)] rounded px-3 py-2"
-                    />
-                    <p id="create-due-date-hint" className="text-xs text-[var(--fgm-text-secondary)] mt-1">
-                      Optional. Click to pick a date — the empty placeholder is year-month-day, not an error.
-                    </p>
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-sm mb-1">Labels</label>
-                  <input value={form.labels} onChange={e => setForm({...form, labels: e.target.value})} placeholder="design, frontend" className="w-full border border-[var(--fgm-border)] rounded px-3 py-2" />
-                </div>
-                <div className="flex gap-3 pt-2">
-                  <Button type="button" variant="secondary" onClick={() => goToList()} className="flex-1">Cancel</Button>
-                  <Button type="submit" variant="primary" className="flex-1">Create Task</Button>
-                </div>
-              </form>
-            </div>
           )}
 
           {/* DETAIL VIEW */}
@@ -944,6 +930,89 @@ function App() {
           )}
         </div>
       </div>
+
+      <dialog
+        ref={createDialogRef}
+        aria-labelledby="create-dialog-title"
+        aria-describedby="create-dialog-desc"
+        className="create-dialog"
+      >
+        <form onSubmit={handleCreate} className="create-dialog-panel">
+          <h2 id="create-dialog-title" className="text-title mb-1">New Task</h2>
+          <p id="create-dialog-desc" className="text-body text-[var(--fgm-text-secondary)] mb-6">Add a new task.</p>
+
+          <div className="space-y-4">
+            <div>
+              <label htmlFor="create-title" className="block text-sm mb-1">Title *</label>
+              <input
+                id="create-title"
+                value={form.title}
+                onChange={e => {
+                  setForm({ ...form, title: e.target.value })
+                  if (createErrors.title) setCreateErrors({})
+                }}
+                aria-invalid={!!createErrors.title}
+                aria-describedby={createErrors.title ? 'create-title-error' : undefined}
+                className={`w-full border rounded px-3 py-2 ${createErrors.title ? 'border-[var(--fgm-danger)]' : 'border-[var(--fgm-border)]'}`}
+              />
+              {createErrors.title && (
+                <p id="create-title-error" role="alert" className="text-xs text-[var(--fgm-danger)] mt-1">
+                  {createErrors.title}
+                </p>
+              )}
+            </div>
+            <div>
+              <label htmlFor="create-description" className="block text-sm mb-1">Description</label>
+              <textarea
+                id="create-description"
+                value={form.description}
+                onChange={e => setForm({ ...form, description: e.target.value })}
+                className="w-full border border-[var(--fgm-border)] rounded px-3 py-2 h-24"
+              />
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm mb-1">Status</label>
+                <Dropdown
+                  value={form.status}
+                  onChange={v => setForm({ ...form, status: v as TaskStatus })}
+                  ariaLabel="Status"
+                  className="w-full"
+                  options={statusOptions}
+                />
+              </div>
+              <div>
+                <label htmlFor="create-due-date" className="block text-sm mb-1">Due date</label>
+                <input
+                  id="create-due-date"
+                  type="date"
+                  value={form.dueDate}
+                  onChange={e => setForm({ ...form, dueDate: e.target.value })}
+                  aria-describedby="create-due-date-hint"
+                  className="w-full border border-[var(--fgm-border)] rounded px-3 py-2"
+                />
+                <p id="create-due-date-hint" className="text-xs text-[var(--fgm-text-secondary)] mt-1">
+                  Optional. Click to pick a date — the empty placeholder is year-month-day, not an error.
+                </p>
+              </div>
+            </div>
+            <div>
+              <label htmlFor="create-labels" className="block text-sm mb-1">Labels</label>
+              <input
+                id="create-labels"
+                value={form.labels}
+                onChange={e => setForm({ ...form, labels: e.target.value })}
+                placeholder="design, frontend"
+                className="w-full border border-[var(--fgm-border)] rounded px-3 py-2"
+              />
+            </div>
+            <div className="flex gap-3 pt-2">
+              <Button type="button" variant="secondary" onClick={closeCreateModal} className="flex-1">Cancel</Button>
+              <Button type="submit" variant="primary" className="flex-1">Create Task</Button>
+            </div>
+          </div>
+        </form>
+      </dialog>
     </div>
   )
 }
